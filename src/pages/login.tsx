@@ -1,11 +1,35 @@
 import { type NextPage } from 'next';
 import { HomeLayout, Form, NextLink } from '../components';
-import { Center, Flex, Heading, Input, Button } from '@chakra-ui/react';
-import { loginSchema } from '../utils/schemas';
+import { Center, Flex, Heading, Input, Button, useToast } from '@chakra-ui/react';
+import { type LoginInput, loginSchema } from '../utils/schemas';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 
 const Login: NextPage = () => {
+  const router = useRouter();
+  const toast = useToast();
+
+  const handleSubmit = async (data: LoginInput) => {
+    const result = await signIn('credentials', { redirect: false, email: data.email, password: data.password });
+
+    if (result?.ok == true) {
+      toast({
+        title: 'Zalogowano pomyślnie',
+        status: 'success',
+        isClosable: true,
+      })
+    } else {
+      toast({
+        title: 'Nie udało się zalogować',
+        description: 'Adres email lub hasło są nieprawidłowe',
+        status: 'error',
+        isClosable: true,
+      });
+    }
+  }
+
   return (
     <HomeLayout>
       <Center
@@ -26,7 +50,7 @@ const Login: NextPage = () => {
 
           <Form
             schema={loginSchema}
-            onSubmit={(data) => console.log(data)}
+            onSubmit={handleSubmit}
             w={320}
           >
             <Form.Field
