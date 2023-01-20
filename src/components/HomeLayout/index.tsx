@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { Box, Flex, Heading, Link, Button } from '@chakra-ui/react';
+import NextLink from '../NextLink';
 
 
 
@@ -15,7 +16,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
         position="fixed"
         top={0}
         left={0}
-        h={16}
+        h={14}
         w="100%"
         direction="row"
         alignItems="center"
@@ -44,9 +45,26 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
             direction="row"
             gap={5}
           >
-            <Link href="/">Strona główna</Link>
-            <Link href="/help">Pomoc</Link>
-            <Link href="/contact">Kontakt</Link>
+            <Link
+              href="/"
+              as={NextLink}
+            >
+              Strona główna
+            </Link>
+
+            <Link
+              href="/help"
+              as={NextLink}
+            >
+              Pomoc
+            </Link>
+
+            <Link
+              href="/contact"
+              as={NextLink}
+            >
+              Kontakt
+            </Link>
           </Flex>
 
           <Flex
@@ -59,7 +77,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
               colorScheme="blue"
               variant="ghost"
               size="sm"
-              as="a"
+              as={NextLink}
               href="/login"
             >
               Logowanie
@@ -69,7 +87,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
               colorScheme="blue"
               variant="solid"
               size="sm"
-              as="a"
+              as={NextLink}
               href="/register"
             >
               Rejestracja
@@ -78,7 +96,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
         </Flex>
       </Flex>
 
-      <Box h={16}/>
+      <Box h={14}/>
 
       <Flex
         maxW="1200px"

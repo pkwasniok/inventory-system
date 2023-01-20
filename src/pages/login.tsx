@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
-import HomeLayout from "../components/HomeLayout";
-import { Center, Flex, FormControl, FormLabel, Input, Button, Heading } from "@chakra-ui/react";
+import { HomeLayout, Form } from '../components';
+import { Center, Flex, Heading, Input, Button } from "@chakra-ui/react";
+import { loginSchema } from '../utils/schemas';
 
 
 
@@ -13,6 +14,7 @@ const Login: NextPage = () => {
         <Flex
           w="320px"
           direction="column"
+          alignItems="center"
           gap={5}
         >
           <Heading
@@ -22,31 +24,29 @@ const Login: NextPage = () => {
             Logowanie
           </Heading>
 
-          <FormControl isRequired>
-            <FormLabel>Adres email</FormLabel>
-            <Input type="email"/>
-          </FormControl>
-
-          <FormControl isRequired>
-            <FormLabel>Hasło</FormLabel>
-            <Input type="password"/>
-          </FormControl>
-
-          <Button
-            colorScheme="blue"
+          <Form
+            schema={loginSchema}
+            onSubmit={(data) => console.log(data)}
+            w={320}
           >
-            Zaloguj się
-          </Button>
+            <Form.Field
+              name="email"
+              label="Adres email"
+              isRequired
+            >
+              <Input/>
+            </Form.Field>
 
-          <hr style={{marginLeft: '10px', marginRight: '10px'}}/>
+            <Form.Field
+              name="password"
+              label="Hasło"
+              isRequired
+            >
+              <Input type="password"/>
+            </Form.Field>
 
-          <Button
-            variant="ghost"
-            as="a"
-            href="/register"
-          >
-            Nie masz konta? Zarejestruj się
-          </Button>
+            <Button type="submit">Zaloguj się</Button>
+          </Form>
         </Flex>
       </Center>
     </HomeLayout>

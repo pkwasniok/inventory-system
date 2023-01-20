@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import HomeLayout from "../components/HomeLayout";
 import { Center, Flex, FormControl, FormLabel, Input, Button, Heading } from "@chakra-ui/react";
+import NextLink from "../components/NextLink";
 
 
 
@@ -43,11 +44,9 @@ const Register: NextPage = () => {
             Zarejestruj się
           </Button>
 
-          <hr style={{marginLeft: '10px', marginRight: '10px'}}/>
-
           <Button
             variant="ghost"
-            as="a"
+            as={NextLink}
             href="/login"
           >
             Masz już konto? Zaloguj się
