@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import { HomeLayout, Form } from '../components';
+import { HomeLayout, Form, NextLink } from '../components';
 import { Center, Flex, Heading, Input, Button } from "@chakra-ui/react";
 import { loginSchema } from '../utils/schemas';
 
@@ -45,8 +45,21 @@ const Login: NextPage = () => {
               <Input type="password"/>
             </Form.Field>
 
-            <Button type="submit">Zaloguj się</Button>
+            <Button
+              type="submit"
+            >
+              Zaloguj się
+            </Button>
           </Form>
+
+          <Button
+            w="100%"
+            variant="ghost"
+            as={NextLink}
+            href="/register"
+          >
+            Nie masz konta? Zarejestruj się
+          </Button>
         </Flex>
       </Center>
     </HomeLayout>

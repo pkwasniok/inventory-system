@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
-import HomeLayout from "../components/HomeLayout";
-import { Center, Flex, FormControl, FormLabel, Input, Button, Heading } from "@chakra-ui/react";
-import NextLink from "../components/NextLink";
+import { Center, Flex, Input, Button, Heading } from "@chakra-ui/react";
+import { HomeLayout, Form, NextLink } from '../components';
+import { registerSchema } from '../utils/schemas';
 
 
 
@@ -14,6 +14,7 @@ const Register: NextPage = () => {
         <Flex
           w="320px"
           direction="column"
+          alignItems="center"
           gap={5}
         >
           <Heading
@@ -23,28 +24,44 @@ const Register: NextPage = () => {
             Rejestracja
           </Heading>
 
-          <FormControl isRequired>
-            <FormLabel>Imię i nazwisko</FormLabel>
-            <Input type="name"/>
-          </FormControl>
-
-          <FormControl isRequired>
-            <FormLabel>Adres email</FormLabel>
-            <Input type="email"/>
-          </FormControl>
-
-          <FormControl isRequired>
-            <FormLabel>Hasło</FormLabel>
-            <Input type="password"/>
-          </FormControl>
-
-          <Button
-            colorScheme="blue"
+          <Form
+            schema={registerSchema}
+            onSubmit={(data) => console.log(data)}
+            w={320}
           >
-            Zarejestruj się
-          </Button>
+            <Form.Field
+              name="name"
+              label="Imię i nazwisko"
+              isRequired
+            >
+              <Input/>
+            </Form.Field>
+
+            <Form.Field
+              name="email"
+              label="Adres email"
+              isRequired
+            >
+              <Input/>
+            </Form.Field>
+
+            <Form.Field
+              name="password"
+              label="Hasło"
+              isRequired
+            >
+              <Input type="password"/>
+            </Form.Field>
+
+            <Button
+              type="submit"
+            >
+              Zaloguj się
+            </Button>
+          </Form>
 
           <Button
+            w="100%"
             variant="ghost"
             as={NextLink}
             href="/login"
