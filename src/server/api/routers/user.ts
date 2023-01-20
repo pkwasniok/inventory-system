@@ -1,6 +1,7 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from '../trpc';
 import { registerSchema } from '../../../utils/schemas';
-import { TRPCError } from "@trpc/server";
+import { TRPCError } from '@trpc/server';
+import { hashPassword } from '../../../utils/password';
 
 
 
@@ -19,7 +20,10 @@ export const userRouter = createTRPCRouter({
       }
 
       await ctx.prisma.user.create({
-        data: input,
+        data: {
+          ...input,
+          password: hashPassword(input.password),
+        },
       });
     }),
 });

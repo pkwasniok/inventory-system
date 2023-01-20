@@ -1,8 +1,8 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db";
+import { comparePassword } from "../../../utils/password";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -23,8 +23,18 @@ export const authOptions: NextAuthOptions = {
         email: { type: 'text' },
         password: { type: 'password' },
       },
-      authorize: (credentials) => {
-        return null;
+      authorize: async (credentials) => {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials?.email,
+          },
+        });
+
+        if (user == null || comparePassword(credentials?.password, user.password as string|undefined) == false) {
+          return null;
+        }
+
+        return user;
       }
     }),
   ],

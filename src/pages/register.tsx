@@ -1,11 +1,39 @@
 import { type NextPage } from 'next';
-import { Center, Flex, Input, Button, Heading } from '@chakra-ui/react';
+import { Center, Flex, Input, Button, Heading, useToast } from '@chakra-ui/react';
 import { HomeLayout, Form, NextLink } from '../components';
 import { registerSchema } from '../utils/schemas';
+import { useRouter } from 'next/navigation';
+import { api } from '../utils/api';
 
 
 
 const Register: NextPage = () => {
+  const router = useRouter();
+  const toast = useToast();
+
+  const { mutate: register } = api.user.register.useMutation({
+    onError: (error) => {
+      if (error.data?.code == 'CONFLICT') {
+        toast({
+          title: 'Nie udało się zarejestrować',
+          description: 'Podany adres email jest już zajęty',
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Pomyślnie zarejestrowano',
+        description: 'Teraz możesz się zalogować',
+        status: 'success',
+        isClosable: true,
+      });
+
+      router.push('/login');
+    }
+  });
+
   return (
     <HomeLayout>
       <Center
@@ -26,7 +54,7 @@ const Register: NextPage = () => {
 
           <Form
             schema={registerSchema}
-            onSubmit={(data) => console.log(data)}
+            onSubmit={register}
             w={320}
           >
             <Form.Field
@@ -56,7 +84,7 @@ const Register: NextPage = () => {
             <Button
               type="submit"
             >
-              Zaloguj się
+              Zarejestruj się
             </Button>
           </Form>
 
