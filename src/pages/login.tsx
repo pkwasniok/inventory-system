@@ -19,7 +19,8 @@ const Login: NextPage = () => {
         title: 'Zalogowano pomyślnie',
         status: 'success',
         isClosable: true,
-      })
+      });
+      router.push('/app');
     } else {
       toast({
         title: 'Nie udało się zalogować',
