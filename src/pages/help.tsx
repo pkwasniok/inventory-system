@@ -1,12 +1,12 @@
-import { type NextPage } from "next";
-import HomeLayout from "../components/HomeLayout";
+import { type NextPage } from 'next';
+import { HomeLayout } from '../components';
 
 
 
 const Help: NextPage = () => {
   return (
     <HomeLayout>
-
+      Pomoc
     </HomeLayout>
   );
 };

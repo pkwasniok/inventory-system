@@ -1,5 +1,5 @@
 import Form from './Form';
-import HomeLayout from './HomeLayout';
+import HomeLayout from './Layout/home.layout';
 import NextLink from './NextLink';
 
 export {

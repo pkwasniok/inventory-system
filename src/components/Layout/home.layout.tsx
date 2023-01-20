@@ -17,6 +17,7 @@ const HomeLayout = ({ children }: { children: ReactNode }) => {
         top={0}
         left={0}
         h={14}
+        px={3}
         w="100%"
         direction="row"
         alignItems="center"

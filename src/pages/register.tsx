@@ -1,5 +1,5 @@
-import { type NextPage } from "next";
-import { Center, Flex, Input, Button, Heading } from "@chakra-ui/react";
+import { type NextPage } from 'next';
+import { Center, Flex, Input, Button, Heading } from '@chakra-ui/react';
 import { HomeLayout, Form, NextLink } from '../components';
 import { registerSchema } from '../utils/schemas';
 
