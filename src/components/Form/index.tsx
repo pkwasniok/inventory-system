@@ -107,7 +107,7 @@ const Form = function Form<T> ({ children, defaultValues = {}, schema, onSubmit,
       >
         <Flex
           direction="column"
-          gap={4}
+          gap={3}
         >
           {children}
         </Flex>

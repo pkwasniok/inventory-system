@@ -1,5 +1,5 @@
 import { type NextPage } from 'next';
-import { Center, Flex, Input, Button, Heading, useToast } from '@chakra-ui/react';
+import { Center, Flex, Input, Button, Heading, useToast, Card } from '@chakra-ui/react';
 import { HomeLayout, Form, NextLink } from '../components';
 import { registerSchema } from '../utils/schemas';
 import { useRouter } from 'next/navigation';
@@ -45,57 +45,60 @@ const Register: NextPage = () => {
           alignItems="center"
           gap={5}
         >
-          <Heading
-            textAlign="center"
-            mb={10}
-          >
-            Rejestracja
-          </Heading>
-
-          <Form
-            schema={registerSchema}
-            onSubmit={register}
-            w={320}
-          >
-            <Form.Field
-              name="name"
-              label="Imię i nazwisko"
-              isRequired
+          <Card p={5} borderRadius={6} variant="elevated">
+            <Heading
+              size="lg"
+              textAlign="center"
+              mb={8}
             >
-              <Input/>
-            </Form.Field>
+              Rejestracja
+            </Heading>
 
-            <Form.Field
-              name="email"
-              label="Adres email"
-              isRequired
+            <Form
+              schema={registerSchema}
+              onSubmit={register}
+              w={320}
             >
-              <Input/>
-            </Form.Field>
+              <Form.Field
+                name="name"
+                label="Imię i nazwisko"
+                isRequired
+              >
+                <Input
+                  variant="filled"
+                />
+              </Form.Field>
 
-            <Form.Field
-              name="password"
-              label="Hasło"
-              isRequired
-            >
-              <Input type="password"/>
-            </Form.Field>
+              <Form.Field
+                name="email"
+                label="Adres email"
+                isRequired
+              >
+                <Input
+                  variant="filled"
+                />
+              </Form.Field>
 
-            <Button
-              type="submit"
-            >
-              Zarejestruj się
-            </Button>
-          </Form>
+              <Form.Field
+                name="password"
+                label="Hasło"
+                isRequired
+              >
+                <Input
+                  variant="filled"
+                  type="password"
+                />
+              </Form.Field>
 
-          <Button
-            w="100%"
-            variant="ghost"
-            as={NextLink}
-            href="/login"
-          >
-            Masz już konto? Zaloguj się
-          </Button>
+              <Button
+                type="submit"
+                colorScheme="blue"
+                mt={5}
+              >
+                Zarejestruj się
+              </Button>
+            </Form>
+          </Card>
         </Flex>
       </Center>
     </HomeLayout>
