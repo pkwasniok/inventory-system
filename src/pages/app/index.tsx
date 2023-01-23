@@ -1,22 +1,11 @@
 import { type NextPage } from 'next';
-import { Center, Flex, Heading, Button } from '@chakra-ui/react';
+import { Center, Flex, Heading, Button, Spacer } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
-
+import { HiOutlineQueueList, HiOutlineChartPie, HiOutlineCog6Tooth } from 'react-icons/hi2';
 
 
 const App: NextPage = () => {
-  const session = useSession({ required: true });
-
-  if (session.status != 'authenticated') {
-    return (
-      <Center
-        w="screen"
-        h="screen"
-      >
-        <Heading>Loading</Heading>
-      </Center>
-    )
-  }
+  const session = useSession({ required: false });
 
   return (
     <Flex
@@ -30,7 +19,7 @@ const App: NextPage = () => {
         bg="blue.500"
         direction="column"
         alignItems="center"
-        gap={5}
+        gap={2}
         p={5}
       >
         <Button
@@ -39,8 +28,33 @@ const App: NextPage = () => {
           colorScheme="whiteAlpha"
           w="100%"
           justifyContent="start"
+          leftIcon={<HiOutlineQueueList size={22}/>}
         >
-          Dashboard
+          Przedmioty
+        </Button>
+
+        <Button
+          variant="ghost"
+          color="white"
+          colorScheme="whiteAlpha"
+          w="100%"
+          justifyContent="start"
+          leftIcon={<HiOutlineChartPie size={22}/>}
+        >
+          Raporty
+        </Button>
+
+        <Spacer/>
+
+        <Button
+          variant="ghost"
+          color="white"
+          colorScheme="whiteAlpha"
+          w="100%"
+          justifyContent="start"
+          leftIcon={<HiOutlineCog6Tooth size={22}/>}
+        >
+          Ustawienia
         </Button>
       </Flex>
     </Flex>
