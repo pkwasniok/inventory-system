@@ -1,9 +1,9 @@
 import Form from './Form';
 import HomeLayout from './Layout/home.layout';
-import NextLink from './NextLink';
+import Sidebar from './Sidebar';
 
 export {
   Form,
   HomeLayout,
-  NextLink,
+  Sidebar,
 }

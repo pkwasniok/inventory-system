@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Box, Flex, Heading, Link, Button } from '@chakra-ui/react';
-import NextLink from '../NextLink';
+import NextLink from 'next/link';
 
 
 
