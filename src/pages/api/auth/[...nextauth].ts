@@ -9,6 +9,10 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
     newUser: '/register',
   },
+  jwt: {
+    maxAge: 2 * 60 * 60,
+  },
+  secret: 'secreadasdasdasdasdasdasdasdasdasdt',
   providers: [
     CredentialsProvider({
       name: 'credentials',
