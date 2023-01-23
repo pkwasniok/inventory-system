@@ -1,5 +1,5 @@
 import { type NextPage } from 'next';
-import { Center, Heading } from '@chakra-ui/react';
+import { Center, Flex, Heading, Button } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 
 
@@ -19,12 +19,31 @@ const App: NextPage = () => {
   }
 
   return (
-    <Center
-      w="screen"
-      h="screen"
+    <Flex
+      position="fixed"
+      inset={0}
+      direction="row"
     >
-      <Heading>Welcome to application</Heading>
-    </Center>
+      <Flex
+        h="screen"
+        w="300px"
+        bg="blue.500"
+        direction="column"
+        alignItems="center"
+        gap={5}
+        p={5}
+      >
+        <Button
+          variant="ghost"
+          color="white"
+          colorScheme="whiteAlpha"
+          w="100%"
+          justifyContent="start"
+        >
+          Dashboard
+        </Button>
+      </Flex>
+    </Flex>
   )
 }
 
