@@ -1,11 +1,45 @@
-import { Center, Card, Heading, Box, Text, Input, Button, Link } from '@chakra-ui/react';
+import { Center, Card, Heading, Box, Text, Input, Button, Link, useToast } from '@chakra-ui/react';
 import { HomeLayout, Form } from '../components';
 import NextLink from 'next/link';
-import { loginSchema } from '../utils/schemas';
+import { type LoginInput, loginSchema } from '../utils/schemas';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 
 const Login = () => {
+  const router = useRouter();
+  const toast = useToast();
+
+  const handleSubmit = async (data: LoginInput) => {
+    const result = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (result?.ok == true) {
+      toast({
+        status: 'success',
+        title: 'Zalogowano pomyślnie',
+      });
+    } else {
+      if (result?.error == 'CredentialsSignin' && result?.status == 401) {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zalogować',
+          description: 'Adres email lub hasło są nieprawidłowe',
+        });
+      } else {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zalogować',
+          description: 'Wystąpił nieznany błąd',
+        });
+      }
+    }
+  }
+
   return (
     <HomeLayout>
       <Center
@@ -33,6 +67,7 @@ const Login = () => {
           <Form
             w={320}
             schema={loginSchema}
+            onSubmit={handleSubmit}
           >
             <Form.Field
               name="email"
