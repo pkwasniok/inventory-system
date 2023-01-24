@@ -14,7 +14,7 @@ const NAVIGATION_URL: { label: string, href: string }[] = [
     href: '/',
   },
   {
-    label: 'Pomoc',
+    label: 'Nowości',
     href: '/',
   },
   {
