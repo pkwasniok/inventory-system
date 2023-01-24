@@ -2,14 +2,23 @@ import { Center, Card, Heading, Box, Text, Input, Button, Link, useToast } from 
 import { HomeLayout, Form } from '../components';
 import NextLink from 'next/link';
 import { type LoginInput, loginSchema } from '../utils/schemas';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 
 
 const Login = () => {
   const router = useRouter();
   const toast = useToast();
+  const session = useSession();
+
+  // redirect user to /app when session is valid
+  useEffect(() => {
+    if (session.status == 'authenticated') {
+      router.push('/app');
+    }
+  }, [session, router]);
 
   const handleSubmit = async (data: LoginInput) => {
     const result = await signIn('credentials', {
@@ -23,6 +32,7 @@ const Login = () => {
         status: 'success',
         title: 'Zalogowano pomyślnie',
       });
+      router.push('/app')
     } else {
       if (result?.error == 'CredentialsSignin' && result?.status == 401) {
         toast({
