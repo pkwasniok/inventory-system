@@ -1,11 +1,42 @@
-import { Center, Card, Heading, Box, Text, Input, Button, Link } from '@chakra-ui/react';
+import { Center, Card, Heading, Box, Text, Input, Button, Link, useToast } from '@chakra-ui/react';
 import { HomeLayout, Form } from '../components';
 import NextLink from 'next/link';
 import { registerSchema } from '../utils/schemas';
+import { api } from '../utils/api';
+import { useRouter } from 'next/navigation';
 
 
 
 const Register = () => {
+  const router = useRouter();
+  const toast = useToast();
+
+  const { mutate: register } = api.user.register.useMutation({
+    onSuccess: () => {
+      toast({
+        status: 'success',
+        title: 'Pomyślnie zarejestrowano',
+        description: 'Teraz możesz się zalogować',
+      });
+      router.push('/login');
+    },
+    onError: (error) => {
+      if (error.data?.code == 'CONFLICT') {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zarejestrować',
+          description: 'Podany adres email jest zajęty',
+        });
+      } else {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zarejestrować',
+          description: 'Wystąpił nieznany błąd',
+        });
+      }
+    }
+  });
+
   return (
     <HomeLayout>
       <Center
@@ -33,6 +64,7 @@ const Register = () => {
           <Form
             w={320}
             schema={registerSchema}
+            onSubmit={register}
           >
             <Form.Field
               name="name"
