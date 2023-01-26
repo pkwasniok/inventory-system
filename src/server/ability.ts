@@ -11,10 +11,12 @@ export type AppAbility = PureAbility<[AppAction, AppSubject], PrismaQuery>;
 export const defineAbilityFor = (user: User|null) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
+  // Return empty ability when user is unauthenticated
   if (user == null) {
     return build();
   }
 
+  // Organization
   can('create', 'Organization');
   can('read', 'Organization', { users: { some: { userId: user.id } } });
 

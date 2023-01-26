@@ -1,4 +1,3 @@
-import { AppLayout } from '../../components';
 import { useSession } from 'next-auth/react';
 import { Flex, Spinner, Text, Button } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -8,11 +7,18 @@ import { api } from '../../utils/api';
 
 const Welcome = () => {
   const session = useSession({ required: true });
-  const { mutate: createOrganization } = api.organization.create.useMutation();
+  const { mutate: createOrganization } = api.organization.create.useMutation({
+    onSuccess: () => refetch(),
+  });
+  const { data: organizations, refetch } = api.organization.get.useQuery();
 
   useEffect(() => {
-    console.log(session);
+    console.log('Session', session);
   }, [session]);
+
+  useEffect(() => {
+    console.log('Organizations', organizations);
+  }, [organizations]);
 
   return (
     <Flex
@@ -34,10 +40,14 @@ const Welcome = () => {
       </Text>
 
       <Button
-        onClick={() => createOrganization()}
+        onClick={() => createOrganization({ name: 'Test' })}
       >
-        Call API
+        Create organization
       </Button>
+
+      <Text>
+        Found {organizations?.length ?? 0} organizations
+      </Text>
     </Flex>
   );
 }
