@@ -1,16 +1,15 @@
-import { Box } from '@chakra-ui/react';
 import { AppLayout } from '../../components';
 
 
 
-const App = () => {
+const Welcome = () => {
   return (
     <AppLayout>
-      Welcome
+      Welcome to application
     </AppLayout>
   )
 }
 
 
 
-export default App;
+export default Welcome;
