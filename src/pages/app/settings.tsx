@@ -2,14 +2,15 @@ import { AppLayout } from '../../components';
 
 
 
-const Welcome = () => {
+const Settings= () => {
   return (
     <AppLayout>
-      Index
+      User
     </AppLayout>
   );
 }
 
 
 
-export default Welcome;
+export default Settings;
+
