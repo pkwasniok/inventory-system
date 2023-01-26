@@ -1,12 +1,14 @@
 import { AppLayout } from '../../components';
 import { useSession } from 'next-auth/react';
-import { Flex, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Spinner, Text, Button } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { api } from '../../utils/api';
 
 
 
 const Welcome = () => {
   const session = useSession({ required: true });
+  const { mutate: createOrganization } = api.organization.create.useMutation();
 
   useEffect(() => {
     console.log(session);
@@ -30,6 +32,12 @@ const Welcome = () => {
       <Text color="blue.600">
         Ładowanie aplikacji
       </Text>
+
+      <Button
+        onClick={() => createOrganization()}
+      >
+        Call API
+      </Button>
     </Flex>
   );
 }

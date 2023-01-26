@@ -21,9 +21,13 @@ import { type Session } from "next-auth";
 
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
+import { type User } from '@prisma/client';
+import { type AppAbility, defineAbilityFor } from '../ability';
 
 type CreateContextOptions = {
   session: Session | null;
+  user: User | null;
+  ability: AppAbility;
 };
 
 /**
@@ -38,6 +42,8 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
+    user: opts.user,
+    ability: opts.ability,
     prisma,
   };
 };
@@ -53,8 +59,23 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   // Get the session from the server using the unstable_getServerSession wrapper function
   const session = await getServerAuthSession({ req, res });
 
+  // Get user when session is valid
+  let user = null;
+  if (session?.user?.email != undefined) {
+    user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+  }
+
+  // Defined ability for user
+  const ability = defineAbilityFor(user);
+
   return createInnerTRPCContext({
     session,
+    user,
+    ability,
   });
 };
 
