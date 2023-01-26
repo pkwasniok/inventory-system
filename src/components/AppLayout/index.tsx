@@ -50,7 +50,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       direction="row"
       gap={3}
     >
-      <Sidebar/>
+      <Sidebar
+        onTabChange={setView}
+      />
+
+      {view}
     </Flex>
   );
 }

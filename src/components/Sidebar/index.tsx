@@ -45,12 +45,15 @@ const TABS = [
 
 
 
-const Sidebar = () => {
+const Sidebar = ({ onTabChange }: { onTabChange: (tab: string) => void }) => {
   const session = useSession();
   const [selectedTab, setSelectedTab] = useState(TABS[0]?.name);
   const [expand, setExpand] = useBoolean(false);
 
-
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
+    onTabChange(tab);
+  }
 
   return (
     <Card
@@ -82,7 +85,7 @@ const Sidebar = () => {
               key={index}
               icon={selectedTab == tab.name ? tab.activeIcon({ size: 22 }) : tab.icon({ size: 20 })}
               aria-label={tab.name}
-              onClick={() => setSelectedTab(tab.name)}
+              onClick={() => handleTabChange(tab.name)}
             />
           ))}
 
@@ -93,7 +96,7 @@ const Sidebar = () => {
             colorScheme={selectedTab == 'user' ? 'blue' : 'gray'}
             icon={<Avatar size="xs"/>}
             aria-label="user"
-            onClick={() => setSelectedTab('user')}
+            onClick={() => handleTabChange('user')}
           />
         </Flex>
       }
@@ -133,7 +136,7 @@ const Sidebar = () => {
               colorScheme={selectedTab == tab.name ? 'blue' : 'gray'}
               leftIcon={selectedTab == tab.name ? tab.activeIcon({ size: 22 }) : tab.icon({ size: 20 })}
               justifyContent="start"
-              onClick={() => setSelectedTab(tab.name)}
+              onClick={() => handleTabChange(tab.name)}
             >
               {tab.label}
             </Button>
@@ -146,7 +149,7 @@ const Sidebar = () => {
             colorScheme={selectedTab == 'user' ? 'blue' : 'gray'}
             leftIcon={<Avatar size="xs"/>}
             justifyContent="start"
-            onClick={() => setSelectedTab('user')}
+            onClick={() => handleTabChange('user')}
           >
             {session.data?.user?.name}
           </Button>
