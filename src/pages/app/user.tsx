@@ -4,8 +4,7 @@ import { AppLayout } from '../../components';
 
 const User = () => {
   return (
-    <AppLayout>
-      User
+    <AppLayout returnHref="/app" title="Ustawienia użytkownika">
     </AppLayout>
   );
 }

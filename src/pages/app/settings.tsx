@@ -4,8 +4,7 @@ import { AppLayout } from '../../components';
 
 const Settings= () => {
   return (
-    <AppLayout>
-      User
+    <AppLayout returnHref="/app" title="Ustawienia aplikacji">
     </AppLayout>
   );
 }
@@ -13,4 +12,3 @@ const Settings= () => {
 
 
 export default Settings;
-

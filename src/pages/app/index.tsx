@@ -4,7 +4,7 @@ import { AppLayout } from '../../components';
 
 const Welcome = () => {
   return (
-    <AppLayout>
+    <AppLayout title="Strona główna">
       Index
     </AppLayout>
   );
