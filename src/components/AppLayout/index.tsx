@@ -1,23 +1,25 @@
 import { type ReactNode } from 'react';
-import { Center, Flex, Spinner, Spacer, Button, IconButton, Avatar, Heading } from '@chakra-ui/react';
+import { Center, Flex, Spinner, Spacer, Button, IconButton, Avatar, Heading, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
-import { HiOutlineBuildingOffice2, HiOutlineCog6Tooth, HiOutlineQuestionMarkCircle, HiChevronLeft, HiOutlineChevronRight } from 'react-icons/hi2';
+import { HiOutlineHome, HiOutlineCog6Tooth, HiOutlineQuestionMarkCircle, HiOutlineChevronRight, HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import { Organization } from '@prisma/client';
 
 
 
 interface AppLayoutProps {
   children: ReactNode;
-  returnHref?: string;
   title?: string;
+  organization?: Organization;
+  loading?: boolean;
 }
 
-const AppLayout = ({ children, returnHref, title }: AppLayoutProps) => {
+const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) => {
   const router = useRouter();
   const session = useSession({ required: true });
 
-  if (session.status == 'loading') {
+  if (session.status == 'loading' || loading == true) {
     return (
       <Center
         position="fixed"
@@ -40,6 +42,7 @@ const AppLayout = ({ children, returnHref, title }: AppLayoutProps) => {
       <Flex
         w="100%"
         h={12}
+        overflow="hidden"
         direction="row"
         alignItems="center"
         px={3}
@@ -47,51 +50,47 @@ const AppLayout = ({ children, returnHref, title }: AppLayoutProps) => {
         borderBottom="1px"
         borderBottomColor="gray.200"
       >
-        {returnHref != undefined &&
-          <IconButton
-            as={NextLink}
-            href={returnHref}
-            size="sm"
-            variant="solid"
-            colorScheme="gray"
-            icon={<HiChevronLeft size={20}/>}
-            aria-label="Back"
-          />
-        }
+        <Breadcrumb spacing="8px" separator={<HiOutlineChevronRight size={18}/>}>
+          <BreadcrumbItem>
+            <IconButton
+              as={NextLink}
+              href="/app"
+              size="sm"
+              icon={<HiOutlineHome size={20}/>}
+              aria-label=""
+            />
+          </BreadcrumbItem>
 
-        {router.query.organization == undefined && title != undefined &&
-          <Heading
-            color="gray.700"
-            fontWeight="semibold"
-            size="xs"
-          >
-            {title}
-          </Heading>
-        }
+          {organization != undefined &&
+            <BreadcrumbItem>
+              <Button
+                as={NextLink}
+                href={`/app/${organization.id}`}
+                variant="link"
+                size="sm"
+                leftIcon={<HiOutlineBuildingOffice2 size={20}/>}
+                transform="auto"
+                color="gray.700"
+              >
+                {organization.name}
+              </Button>
+            </BreadcrumbItem>
+          }
 
-        {router.query.organization != undefined &&
-          <Button
-            size="sm"
-            variant="ghost"
-            colorScheme="gray"
-            leftIcon={<HiOutlineBuildingOffice2 size={20}/>}
-          >
-            Zespół Szkół im. I. J. Paderewskiego w Knurowie
-          </Button>
-        }
-
-        {router.query.organization != undefined && title != undefined &&
-          <Flex
-            direction="row"
-            color="gray.500"
-            gap={3}
-            transform="auto"
-            translateX="-9px"
-          >
-            <HiOutlineChevronRight size={18}/>
-            <Heading color="gray.700" fontWeight="semibold" size="xs">{title}</Heading>
-          </Flex>
-        }
+          {title != undefined &&
+            <BreadcrumbItem>
+              <Button
+                as={NextLink}
+                href={router.asPath}
+                variant="link"
+                size="sm"
+                color="gray.700"
+              >
+                {title}
+              </Button>
+            </BreadcrumbItem>
+          }
+        </Breadcrumb>
 
         <Spacer/>
 

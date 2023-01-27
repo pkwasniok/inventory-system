@@ -4,7 +4,9 @@ import { AppLayout } from '../../components';
 
 const Settings= () => {
   return (
-    <AppLayout returnHref="/app" title="Ustawienia aplikacji">
+    <AppLayout
+      title="Ustawienia"
+    >
     </AppLayout>
   );
 }

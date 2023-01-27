@@ -33,7 +33,7 @@ const Welcome = () => {
   const organizationCreateModal = useDisclosure();
 
   return (
-    <AppLayout title="Strona główna">
+    <AppLayout>
       <Modal
         isOpen={organizationCreateModal.isOpen}
         onClose={organizationCreateModal.onClose}
