@@ -1,9 +1,11 @@
 import { AppLayout } from '../../components';
-import { Center, Flex, Card, Heading, SimpleGrid, Button, IconButton } from '@chakra-ui/react';
+import { Center, Flex, Card, Heading, SimpleGrid, Button, Image, Divider } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { api } from '../../utils/api';
 import { HiOutlineBuildingOffice2, HiOutlineChevronRight, HiOutlinePlus } from 'react-icons/hi2';
 import NextLink from 'next/link';
+import NextImage from 'next/image';
+import UndrawHello from '../../../public/undraw/undraw_hello.svg';
 
 
 
@@ -35,6 +37,16 @@ const Welcome = () => {
           direction="column"
           gap={3}
         >
+          <Center>
+            <Image
+              as={NextImage}
+              w={[340, 380, 420]}
+              alt=""
+              src={UndrawHello}
+              my={20}
+            />
+          </Center>
+
           {/* Organizations section */}
           <Flex
             gap={3}
@@ -56,10 +68,12 @@ const Welcome = () => {
             </Button>
           </Flex>
 
+          <Divider/>
+
           <SimpleGrid
             w="100%"
             p={3}
-            columns={[1, 2, 2, 3]}
+            columns={[1, 1, 2, 3]}
             gap={6}
           >
             {organizations.data != undefined && organizations.data.map((organization) => (
