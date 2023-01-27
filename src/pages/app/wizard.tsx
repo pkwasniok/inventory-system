@@ -19,7 +19,7 @@ const Wizard = () => {
 
     toast({
       status: 'success',
-      title: 'Pomyślnie utworzono organizację',
+      title: 'Utworzono organizację',
     });
 
     router.push(`/app/${organization.id}`);

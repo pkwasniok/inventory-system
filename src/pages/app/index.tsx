@@ -1,16 +1,18 @@
-import { AppLayout } from '../../components';
-import { Center, Flex, Card, Heading, SimpleGrid, Button, Image, Divider } from '@chakra-ui/react';
+import { AppLayout, Form } from '../../components';
+import { Center, Flex, Card, Heading, SimpleGrid, Button, Image, Divider, Modal, ModalOverlay, ModalContent, useDisclosure, Input, ModalHeader, ModalBody, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { api } from '../../utils/api';
 import { HiOutlineBuildingOffice2, HiOutlineChevronRight, HiOutlinePlus } from 'react-icons/hi2';
 import NextLink from 'next/link';
 import NextImage from 'next/image';
 import UndrawHello from '../../../public/undraw/undraw_hello.svg';
+import { organizationCreateSchema } from '../../utils/schemas';
 
 
 
 const Welcome = () => {
   const router = useRouter();
+  const toast = useToast();
   const organizations = api.organization.getAll.useQuery(undefined, {
     onSuccess: (data) => {
       if (data.length == 0) {
@@ -18,12 +20,71 @@ const Welcome = () => {
       }
     }
   });
-
-
-
+  const { mutate: createOrganization } = api.organization.create.useMutation({
+    onSuccess: () => {
+      organizations.refetch()
+      toast({
+        status: 'success',
+        title: 'Utworzono organizację'
+      });
+      organizationCreateModal.onClose();
+    }
+  });
+  const organizationCreateModal = useDisclosure();
 
   return (
     <AppLayout title="Strona główna">
+      <Modal
+        isOpen={organizationCreateModal.isOpen}
+        onClose={organizationCreateModal.onClose}
+        isCentered
+      >
+        <ModalOverlay/>
+
+        <ModalContent
+          flexDirection="column"
+        >
+          <ModalHeader>Tworzenie organizacji</ModalHeader>
+
+          <ModalBody>
+            <Form
+              schema={organizationCreateSchema}
+              onSubmit={createOrganization}
+            >
+              <Form.Field
+                name="name"
+                label="Nazwa organizacji"
+              >
+                <Input/>
+              </Form.Field>
+
+              <Flex
+                direction="row"
+                gap={3}
+                justifyContent="end"
+                mb={2}
+                mt={3}
+              >
+                <Button
+                  variant="ghost"
+                  onClick={organizationCreateModal.onClose}
+                >
+                  Anuluj
+                </Button>
+
+                <Button
+                  colorScheme="blue"
+                  type="submit"
+                  rightIcon={<HiOutlinePlus size={20}/>}
+                >
+                  Utwórz organizację
+                </Button>
+              </Flex>
+            </Form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       <Center
         w="100%"
         h="100%"
@@ -47,7 +108,6 @@ const Welcome = () => {
             />
           </Center>
 
-          {/* Organizations section */}
           <Flex
             gap={3}
             alignItems="center"
@@ -63,6 +123,7 @@ const Welcome = () => {
               variant="ghost"
               size="sm"
               rightIcon={<HiOutlinePlus size={20}/>}
+              onClick={organizationCreateModal.onOpen}
             >
               Utwórz organizację
             </Button>
