@@ -15,14 +15,14 @@ const FormContext = createContext<FormContext|undefined>(undefined);
 
 interface FormProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'|'onChange'> {
   children: ReactNode;
-  defaultValues?: { [key: string]: string };
+  defaultValues?: T;
   schema?: ZodType<T>;
   onSubmit?: (data: T) => void;
   onChange?: (data: T) => void;
   w?: number;
 }
 
-const Form = function Form<T> ({ children, defaultValues = {}, schema, onSubmit, onChange, w }: FormProps<T>) {
+const Form = function Form<T> ({ children, defaultValues = {} as T, schema, onSubmit, onChange, w }: FormProps<T>) {
   const [ errors, setErrors ] = useState<{ [key: string]: string }>({});
   const [ validateOnChange, setValidateOnChange ] = useState(false);
 
@@ -99,7 +99,7 @@ const Form = function Form<T> ({ children, defaultValues = {}, schema, onSubmit,
   }
 
   return (
-    <FormContext.Provider value={{ errors, defaultValues }}>
+    <FormContext.Provider value={{ errors, defaultValues: defaultValues as { [key: string]: string } }}>
       <form
         onSubmit={handleSubmit}
         onChange={handleChange}
