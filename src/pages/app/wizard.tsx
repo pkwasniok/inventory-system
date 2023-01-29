@@ -1,11 +1,23 @@
-import { AppLayout, Form } from '../../components';
-import { Flex, Heading, Text, Box, Button, Input, Card, Image, useToast } from '@chakra-ui/react';
-import { HiOutlinePlus } from 'react-icons/hi2';
-import { useRouter } from 'next/router';
-import { organizationCreateSchema, type OrganizationCreateInput } from '../../utils/schemas';
-import { api } from '../../utils/api';
 import NextImage from 'next/image';
-import UndrawSetupWizard from '../../../public/undraw/undraw_setup_wizard.svg';
+import { useRouter } from 'next/router';
+import { AppLayout, Form } from '@/components';
+import { organizationCreateSchema, type OrganizationCreateInput } from '@/utils/schemas';
+import { api } from '@/utils/api';
+import UndrawSetupWizard from '@public/undraw/undraw_setup_wizard.svg';
+
+import {
+  useToast,
+  Flex,
+  Heading,
+  Text,
+  Box,
+  Button,
+  Input,
+  Card,
+  Image,
+} from '@chakra-ui/react';
+
+import { HiOutlinePlus } from 'react-icons/hi2';
 
 
 

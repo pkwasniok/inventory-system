@@ -1,12 +1,35 @@
-import { AppLayout, Form } from '../../components';
-import { Center, Flex, Card, Heading, SimpleGrid, Button, Image, Divider, Modal, ModalOverlay, ModalContent, useDisclosure, Input, ModalHeader, ModalBody, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { api } from '../../utils/api';
-import { HiOutlineBuildingOffice2, HiOutlineChevronRight, HiOutlinePlus } from 'react-icons/hi2';
 import NextLink from 'next/link';
 import NextImage from 'next/image';
-import UndrawHello from '../../../public/undraw/undraw_hello.svg';
-import { organizationCreateSchema } from '../../utils/schemas';
+import { AppLayout, Form } from '@/components';
+import { api } from '@/utils/api';
+import { organizationCreateSchema } from '@/utils/schemas';
+import UndrawHello from '@public/undraw/undraw_hello.svg';
+
+import {
+  useToast,
+  useDisclosure,
+  Center,
+  Flex,
+  Card,
+  Heading,
+  SimpleGrid,
+  Button,
+  Image,
+  Divider,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  Input,
+  ModalHeader,
+  ModalBody,
+} from '@chakra-ui/react';
+
+import {
+  HiOutlineBuildingOffice2,
+  HiOutlineChevronRight,
+  HiOutlinePlus
+} from 'react-icons/hi2';
 
 
 

@@ -1,9 +1,20 @@
-import { Center, Card, Heading, Box, Text, Input, Button, Link, useToast } from '@chakra-ui/react';
-import { HomeLayout, Form } from '../components';
 import NextLink from 'next/link';
-import { registerSchema } from '../utils/schemas';
-import { api } from '../utils/api';
 import { useRouter } from 'next/navigation';
+import { HomeLayout, Form } from '@/components';
+import { registerSchema } from '@/utils/schemas';
+import { api } from '@/utils/api';
+
+import {
+  Center,
+  Card,
+  Heading,
+  Box,
+  Text,
+  Input,
+  Button,
+  Link,
+  useToast
+} from '@chakra-ui/react';
 
 
 

@@ -1,8 +1,9 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc';
-import { organizationCreateSchema } from '../../../utils/schemas';
+import { organizationCreateSchema, organizationUpdateSchema } from '../../../utils/schemas';
 import { TRPCError } from '@trpc/server';
 import { accessibleBy } from '@casl/prisma';
 import { z } from 'zod';
+import { subject } from '@casl/ability';
 
 
 
@@ -44,6 +45,29 @@ export const organizationRouter = createTRPCRouter({
             accessibleBy(ctx.ability).Organization,
             { id: input },
           ],
+        },
+      });
+    }),
+  update: protectedProcedure
+    .input(organizationUpdateSchema)
+    .mutation( async ({ ctx, input }) => {
+      const organization = await ctx.prisma.organization.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (organization == null || ctx.ability.can('update', subject('Organization', organization)) == false) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      await ctx.prisma.organization.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...input,
+          id: undefined,
         },
       });
     }),

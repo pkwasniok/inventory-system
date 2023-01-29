@@ -1,9 +1,13 @@
-import { AppLayout } from '../../../components';
-import { Flex, Card, Table, Thead, TBody, Tr, Td, Th } from '@chakra-ui/react';
-import { api } from '../../../utils/api';
+import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTable } from 'react-table';
-import { useMemo } from 'react';
+import { AppLayout } from '@/components';
+import { api } from '@/utils/api';
+
+import {
+  Flex,
+  Card,
+} from '@chakra-ui/react';
 
 
 

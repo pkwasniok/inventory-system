@@ -1,5 +1,5 @@
 import { type NextPage } from 'next';
-import { HomeLayout } from '../components';
+import { HomeLayout } from '@/components';
 
 
 

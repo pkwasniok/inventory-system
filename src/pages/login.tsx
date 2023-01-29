@@ -1,10 +1,21 @@
-import { Center, Card, Heading, Box, Text, Input, Button, Link, useToast } from '@chakra-ui/react';
-import { HomeLayout, Form } from '../components';
-import NextLink from 'next/link';
-import { type LoginInput, loginSchema } from '../utils/schemas';
-import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn, useSession } from 'next-auth/react';
+import { HomeLayout, Form } from '@/components';
+import { type LoginInput, loginSchema } from '@/utils/schemas';
+
+import {
+  Center,
+  Card,
+  Heading,
+  Box,
+  Text,
+  Input,
+  Button,
+  Link,
+  useToast
+} from '@chakra-ui/react';
 
 
 
