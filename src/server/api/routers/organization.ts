@@ -7,6 +7,10 @@ import { subject } from '@casl/ability';
 
 
 
+const ORGANIZATION_DEFAULT_COLOR = '#2b6cb0';
+
+
+
 export const organizationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(organizationCreateSchema)
@@ -15,6 +19,7 @@ export const organizationRouter = createTRPCRouter({
         return await ctx.prisma.organization.create({
           data: {
             ...input,
+            color: ORGANIZATION_DEFAULT_COLOR,
             users: {
               create: {
                 userId: ctx.user.id,

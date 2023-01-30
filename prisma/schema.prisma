@@ -55,9 +55,17 @@ model VerificationToken {
 
 // Bussiness logic
 model Organization {
-  id    String               @id @default(uuid())
+  id String @id @default(uuid())
+
+  books Book[]
+  rooms Room[]
+
   name  String
+  color String
   users UserOnOrganization[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserOnOrganization {
@@ -66,5 +74,71 @@ model UserOnOrganization {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@id([userId, organizationId])
+}
+
+model Book {
+  id String @id @default(uuid())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  groups         Group[]
+  item           Item[]
+
+  name        String
+  description String @default("")
+  color       String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Room {
+  id String @id @default(uuid())
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  items          Item[]
+
+  name        String
+  description String @default("")
+  color       String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Group {
+  id Int @id @default(autoincrement())
+
+  book   Book   @relation(fields: [bookId], references: [id])
+  bookId String
+  items  Item[]
+
+  name        String
+  description String @default("")
+  color       String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Item {
+  id Int @id @default(autoincrement())
+
+  book   Book    @relation(fields: [bookId], references: [id])
+  bookId String
+  room   Room    @relation(fields: [roomId], references: [id])
+  roomId String
+  groups Group[]
+
+  name        String
+  description String @default("")
+  color       String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
