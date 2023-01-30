@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import NextImage from 'next/image';
-import { AppLayout, Form } from '@/components';
+import { AppLayout } from '@/components';
 import { api } from '@/utils/api';
 import { organizationCreateSchema } from '@/utils/schemas';
 import UndrawHello from '@public/undraw/undraw_hello.svg';
+import { Form } from '@/features/form';
 
 import {
   useToast,
@@ -86,7 +87,7 @@ const Welcome = () => {
                 gap={3}
                 justifyContent="end"
                 mb={2}
-                mt={3}
+                mt={6}
               >
                 <Button
                   variant="ghost"

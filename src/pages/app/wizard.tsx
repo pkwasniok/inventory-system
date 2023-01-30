@@ -1,9 +1,10 @@
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
-import { AppLayout, Form } from '@/components';
+import { AppLayout } from '@/components';
 import { organizationCreateSchema, type OrganizationCreateInput } from '@/utils/schemas';
 import { api } from '@/utils/api';
 import UndrawSetupWizard from '@public/undraw/undraw_setup_wizard.svg';
+import { Form } from '@/features/form';
 
 import {
   useToast,
@@ -38,7 +39,7 @@ const Wizard = () => {
   }
 
   return (
-    <AppLayout title="Konfiguracja aplikacji">
+    <AppLayout title="Tworzenie organizacji">
       <Flex
         h="100%"
         w="100%"
@@ -67,33 +68,26 @@ const Wizard = () => {
           mb={20}
         />
 
-        <Card
-          variant="outline"
-          p={6}
+        <Form
+          w={350}
+          schema={organizationCreateSchema}
+          onSubmit={handleSubmit}
+          isOutlined
         >
-          <Form
-            w={320}
-            schema={organizationCreateSchema}
-            onSubmit={handleSubmit}
+          <Form.Field
+            name="name"
+            label="Nazwa organizacji"
           >
-            <Form.Field
-              name="name"
-              label="Nazwa organizacji"
-            >
-              <Input/>
-            </Form.Field>
+            <Input/>
+          </Form.Field>
 
-            <Box h={2}/>
-
-            <Button
-              colorScheme="blue"
-              type="submit"
-              rightIcon={<HiOutlinePlus size={20}/>}
-            >
-              Utworz organizację
-            </Button>
-          </Form>
-        </Card>
+          <Form.Submit
+            colorScheme="blue"
+            rightIcon={<HiOutlinePlus size={20}/>}
+          >
+            Utworz organizację
+          </Form.Submit>
+        </Form>
       </Flex>
     </AppLayout>
   );

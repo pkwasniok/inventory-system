@@ -1,8 +1,9 @@
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { HomeLayout, Form } from '@/components';
+import { HomeLayout } from '@/components';
 import { registerSchema } from '@/utils/schemas';
 import { api } from '@/utils/api';
+import { Form } from '@/features/form';
 
 import {
   Center,
@@ -68,48 +69,41 @@ const Register = () => {
 
         <Box h={10}/>
 
-        <Card
-          variant="outline"
-          p={6}
+        <Form
+          w={350}
+          schema={registerSchema}
+          onSubmit={register}
+          isOutlined
         >
-          <Form
-            w={320}
-            schema={registerSchema}
-            onSubmit={register}
+          <Form.Field
+            name="name"
+            label="Imię i nazwisko"
           >
-            <Form.Field
-              name="name"
-              label="Imię i nazwisko"
-            >
-              <Input/>
-            </Form.Field>
+            <Input/>
+          </Form.Field>
 
-            <Form.Field
-              name="email"
-              label="Adres email"
-            >
-              <Input/>
-            </Form.Field>
+          <Form.Field
+            name="email"
+            label="Adres email"
+          >
+            <Input/>
+          </Form.Field>
 
-            <Form.Field
-              name="password"
-              label="Hasło"
-            >
-              <Input
-                type="password"
-              />
-            </Form.Field>
+          <Form.Field
+            name="password"
+            label="Hasło"
+          >
+            <Input
+              type="password"
+            />
+          </Form.Field>
 
-            <Box h={2}/>
-
-            <Button
-              type="submit"
-              colorScheme="blue"
-            >
-              Zarejestruj się
-            </Button>
-          </Form>
-        </Card>
+          <Form.Submit
+            colorScheme="blue"
+          >
+            Zarejestruj się
+          </Form.Submit>
+        </Form>
       </Center>
     </HomeLayout>
   );

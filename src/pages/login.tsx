@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
-import { HomeLayout, Form } from '@/components';
+import { HomeLayout } from '@/components';
 import { type LoginInput, loginSchema } from '@/utils/schemas';
+import { Form } from '@/features/form';
 
 import {
   Center,
@@ -81,41 +82,34 @@ const Login = () => {
 
         <Box h={10}/>
 
-        <Card
-          variant="outline"
-          p={6}
+        <Form
+          w={350}
+          schema={loginSchema}
+          onSubmit={handleSubmit}
+          isOutlined
         >
-          <Form
-            w={320}
-            schema={loginSchema}
-            onSubmit={handleSubmit}
+          <Form.Field
+            name="email"
+            label="Adres email"
           >
-            <Form.Field
-              name="email"
-              label="Adres email"
-            >
-              <Input/>
-            </Form.Field>
+            <Input/>
+          </Form.Field>
 
-            <Form.Field
-              name="password"
-              label="Hasło"
-            >
-              <Input
-                type="password"
-              />
-            </Form.Field>
+          <Form.Field
+            name="password"
+            label="Hasło"
+          >
+            <Input
+              type="password"
+            />
+          </Form.Field>
 
-            <Box h={2}/>
-
-            <Button
-              type="submit"
-              colorScheme="blue"
-            >
-              Zaloguj się
-            </Button>
-          </Form>
-        </Card>
+          <Form.Submit
+            colorScheme="blue"
+          >
+            Zaloguj się
+          </Form.Submit>
+        </Form>
       </Center>
     </HomeLayout>
   );

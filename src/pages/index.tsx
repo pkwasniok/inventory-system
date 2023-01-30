@@ -1,6 +1,7 @@
 import { type NextPage } from 'next';
 import { HomeLayout } from '@/components';
 import { Form } from '@/features/form';
+import { loginSchema } from '@/utils/schemas';
 
 import {
   Center,
@@ -12,16 +13,16 @@ import {
 const Home: NextPage = () => {
   return (
     <HomeLayout>
-      <Form w={320} isOutlined>
+      <Form w={320} schema={loginSchema} onSubmit={() => console.log('Ok')} isOutlined>
         <Form.Field label="Adres email" name="email">
           <Input/>
         </Form.Field>
 
-        <Form.Field label="Hasło">
+        <Form.Field label="Hasło" name="password">
           <Input/>
         </Form.Field>
 
-        <Form.Submit colorScheme="blue" align="right">Zaloguj się</Form.Submit>
+        <Form.Submit colorScheme="blue">Zaloguj się</Form.Submit>
       </Form>
     </HomeLayout>
   );

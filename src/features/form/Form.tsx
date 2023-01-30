@@ -2,6 +2,7 @@ import {
   type ReactNode,
   type ReactElement,
   type FormHTMLAttributes,
+  type FormEvent,
   createContext,
   useState,
   useContext,
@@ -45,8 +46,81 @@ interface FormProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubm
   w?: string|number;
 };
 
-export const Form = function Form<T> ({ children, defaultValues, isOutlined, onSubmit, onChange, schema, w, ...props }: FormProps<T>) {
+export const Form = function Form<T> ({ children, defaultValues = {}, isOutlined, onSubmit, onChange, schema, w, ...props }: FormProps<T>) {
   const [ errors, setErrors ] = useState<{ [key: string]: string }>({});
+  const [ validateOnChange, setValidateOnChange ] = useState(false);
+
+  const getFormValues = (e: FormEvent<HTMLFormElement>) => {
+    const form: { [key: string]: { name: string; value: string } } = e.currentTarget;
+
+    const values = new Map<string, string>();
+    for (let i=0; i<e.currentTarget.length; i++) {
+      const name = form[i]?.name;
+      const value = form[i]?.value;
+
+      if (name != undefined && value != undefined && name != '') {
+        values.set(name, value);
+      }
+    }
+
+    return Object.fromEntries(values);
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    let values = getFormValues(e) as T;
+
+    if (schema != undefined) {
+      const result = schema.safeParse(values);
+
+      if (result.success == true) {
+        values = result.data;
+        setErrors({});
+      } else {
+        const errors: { [key: string]: string } = {};
+        result.error.issues.forEach((issue) => {
+          if (issue.path != undefined && issue.path.length > 0) {
+            errors[issue.path[0] as string] = issue.message;
+          }
+        });
+        setErrors({ ...errors });
+        setValidateOnChange(true);
+        return;
+      }
+    }
+
+    if (onSubmit != undefined) {
+      onSubmit(values);
+    }
+  }
+
+  const handleChange = (e: FormEvent<HTMLFormElement>) => {
+    let values = getFormValues(e) as T;
+
+    if (schema != undefined && validateOnChange == true) {
+      const result = schema.safeParse(values);
+
+      if (result.success == true) {
+        values = result.data;
+        setErrors({});
+        setValidateOnChange(false);
+      } else {
+        const errors: { [key: string]: string } = {};
+        result.error.issues.forEach((issue) => {
+          if (issue.path != undefined && issue.path.length > 0) {
+            errors[issue.path[0] as string] = issue.message;
+          }
+        });
+        setErrors({ ...errors });
+        return;
+      }
+    }
+
+    if (onChange != undefined) {
+      onChange(values);
+    }
+  }
 
   if (isOutlined) {
     return (
@@ -58,8 +132,10 @@ export const Form = function Form<T> ({ children, defaultValues, isOutlined, onS
         <FormContext.Provider value={{ errors, defaultValues: defaultValues as { [key: string]: string } ?? {} }}>
           <chakra.form
             flexDirection="column"
-            gap={3}
+            gap={6}
             w="100%"
+            onSubmit={handleSubmit}
+            onChange={handleChange}
             {...props}
           >
             {children}
@@ -88,7 +164,7 @@ export const Form = function Form<T> ({ children, defaultValues, isOutlined, onS
 // form field wrapper
 interface FormFieldProps {
   children: ReactElement;
-  name?: string;
+  name: string;
   label?: string;
   hint?: string;
 };
@@ -97,7 +173,7 @@ const Field = ({ children, name, label, hint }: FormFieldProps) => {
   const context = useContext(FormContext);
 
   return (
-    <FormControl>
+    <FormControl isInvalid={context.errors[name] != undefined} mb={3}>
       {label != undefined &&
         <FormLabel>{label}</FormLabel>
       }
@@ -107,10 +183,13 @@ const Field = ({ children, name, label, hint }: FormFieldProps) => {
         defaultValue: name != undefined ? context.defaultValues[name] : undefined,
       })}
 
-      {name != undefined && context.errors[name] != undefined
-        ? <FormErrorMessage mb={3}>{context.errors[name]}</FormErrorMessage>
-        : <FormHelperText mb={3}>{hint}</FormHelperText>
-      }
+      <FormErrorMessage>
+        {context.errors[name]}
+      </FormErrorMessage>
+
+      <FormHelperText>
+        {hint}
+      </FormHelperText>
     </FormControl>
   );
 }
@@ -120,7 +199,7 @@ Form.Field = Field;
 
 
 // form submit button
-interface FormSubmitProps extends ButtonProps {
+interface FormSubmitProps extends Omit<ButtonProps, 'type'|'onClick'> {
   align?: 'left'|'center'|'right';
 }
 
@@ -133,6 +212,8 @@ const Submit = ({ align, children, ...props }: FormSubmitProps) => {
       justifyContent={align === 'left' ? 'start' : (align === 'right' ? 'end' : 'center')}
     >
       <Button
+        type="submit"
+        w={align == undefined ? '100%' : undefined}
         {...props}
       >
         {children}
