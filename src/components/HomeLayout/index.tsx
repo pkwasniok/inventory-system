@@ -1,7 +1,18 @@
 import { type ReactNode } from 'react';
 import NextLink from 'next/link';
-import { Box, Center, Flex, Heading, Spacer, Link, Button, IconButton, useBoolean } from '@chakra-ui/react';
 import { HiOutlineBars3 } from 'react-icons/hi2';
+
+import {
+  useBoolean,
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Spacer,
+  Link,
+  Button,
+  IconButton,
+} from '@chakra-ui/react';
 
 
 

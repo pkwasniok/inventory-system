@@ -1,10 +1,34 @@
 import { type ReactNode } from 'react';
-import { Center, Flex, Spinner, Spacer, Button, IconButton, Avatar, Heading, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
-import { HiOutlineHome, HiOutlineCog6Tooth, HiOutlineQuestionMarkCircle, HiOutlineChevronRight, HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Organization } from '@prisma/client';
+
+import {
+  useDisclosure,
+  Center,
+  Flex,
+  Spinner,
+  Spacer,
+  Button,
+  IconButton, Avatar,
+  Breadcrumb,
+  BreadcrumbItem,
+} from '@chakra-ui/react';
+
+import {
+  HiOutlineHome,
+  HiOutlineCog6Tooth,
+  HiOutlineQuestionMarkCircle,
+  HiOutlineChevronRight,
+  HiOutlineBuildingOffice2
+} from 'react-icons/hi2';
+
+import { ApplicationSettingsModal } from './ApplicationSettingsModal';
+
+import { UserSettingsModal } from './UserSettingsModal';
+
+import { HelpModal } from './HelpModal';
 
 
 
@@ -18,6 +42,9 @@ interface AppLayoutProps {
 const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) => {
   const router = useRouter();
   const session = useSession({ required: true });
+  const userSettingsModal = useDisclosure();
+  const applicationSettingsModal = useDisclosure();
+  const helpModal = useDisclosure();
 
   if (session.status == 'loading' || loading == true) {
     return (
@@ -39,6 +66,21 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
       inset={0}
       direction="column"
     >
+      <ApplicationSettingsModal
+        isOpen={applicationSettingsModal.isOpen}
+        onClose={applicationSettingsModal.onClose}
+      />
+
+      <UserSettingsModal
+        isOpen={userSettingsModal.isOpen}
+        onClose={userSettingsModal.onClose}
+      />
+
+      <HelpModal
+        isOpen={helpModal.isOpen}
+        onClose={helpModal.onClose}
+      />
+
       <Flex
         w="100%"
         h={12}
@@ -100,26 +142,25 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
           colorScheme="gray"
           icon={<HiOutlineQuestionMarkCircle size={20}/>}
           aria-label="Help"
+          onClick={helpModal.onOpen}
         />
 
         <IconButton
-          as={NextLink}
-          href="/app/settings"
           size="sm"
           variant="ghost"
           colorScheme="gray"
           icon={<HiOutlineCog6Tooth size={20}/>}
           aria-label="Application settings"
+          onClick={applicationSettingsModal.onOpen}
         />
 
         <IconButton
-          as={NextLink}
-          href="/app/user"
           size="sm"
           variant="ghost"
           colorScheme="gray"
           icon={<Avatar size="xs" name={session.data.user?.name ?? undefined}/>}
           aria-label="User settings"
+          onClick={userSettingsModal.onOpen}
         />
       </Flex>
 
