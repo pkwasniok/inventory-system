@@ -15,6 +15,7 @@ import {
   Heading,
   Divider,
   Input,
+  Button,
 } from '@chakra-ui/react';
 
 
@@ -27,11 +28,39 @@ const OrganizationSettings = () => {
   const organization = api.organization.getById.useQuery(query.organization);
   const { mutate: updateOrganization } = api.organization.update.useMutation({
     onSuccess: () => {
+      organization.refetch();
       toast({
         status: 'success',
         title: 'Zapisano zmiany',
       });
     },
+    onError: (error) => {
+      if (error.data?.code === 'FORBIDDEN') {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zapisać',
+          description: 'Nie posiadasz uprawnień do wykonania tej operacji',
+        });
+      }
+    }
+  });
+  const { mutate: deleteOrganization } = api.organization.delete.useMutation({
+    onSuccess: () => {
+      router.push('/app');
+      toast({
+        status: 'success',
+        title: 'Zapisano zmiany',
+      });
+    },
+    onError: (error) => {
+      if (error.data?.code === 'FORBIDDEN') {
+        toast({
+          status: 'error',
+          title: 'Nie udało się zapisać',
+          description: 'Nie posiadasz uprawnień do wykonania tej operacji',
+        });
+      }
+    }
   });
 
   return (
@@ -91,7 +120,7 @@ const OrganizationSettings = () => {
             Członkowie
           </Heading>
 
-          <Divider/>
+          <Divider/> */}
 
           <Heading
             size="sm"
@@ -107,10 +136,11 @@ const OrganizationSettings = () => {
           >
             <Button
               colorScheme="red"
+              onClick={() => deleteOrganization(organization.data!.id)}
             >
               Usuń organizację
             </Button>
-          </Flex> */}
+          </Flex>
         </Flex>
       </Center>
     </AppLayout>

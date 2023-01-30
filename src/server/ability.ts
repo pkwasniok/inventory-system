@@ -19,6 +19,8 @@ export const defineAbilityFor = (user: User|null) => {
   // Organization
   can('create', 'Organization');
   can('read', 'Organization', { users: { some: { userId: user.id } } });
+  can('update', 'Organization', { users: { some: { userId: user.id } } });
+  can('delete', 'Organization', { users: { some: { userId: user.id } } });
 
   return build();
 }

@@ -244,7 +244,7 @@ const Value = ({ name, value }: FormValueProps) => {
   return (
     <chakra.input
       name={name}
-      value={value ?? context.defaultValues[name]}
+      value={value ?? context.defaultValues[name] ?? undefined}
       hidden
     />
   );

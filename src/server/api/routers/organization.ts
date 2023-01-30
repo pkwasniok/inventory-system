@@ -60,6 +60,9 @@ export const organizationRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+        include: {
+          users: true,
+        },
       });
 
       if (organization == null || ctx.ability.can('update', subject('Organization', organization)) == false) {
@@ -75,6 +78,35 @@ export const organizationRouter = createTRPCRouter({
           id: undefined,
         },
       });
+    }),
+  delete: protectedProcedure
+    .input(z.string().uuid())
+    .mutation(async ({ ctx, input }) => {
+      const organization = await ctx.prisma.organization.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          users: true,
+        },
+      });
+
+      if (organization == null || ctx.ability.can('delete', subject('Organization', organization)) == false) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      await ctx.prisma.$transaction([
+        ctx.prisma.userOnOrganization.deleteMany({
+          where: {
+            organizationId: organization.id,
+          },
+        }),
+        ctx.prisma.organization.delete({
+          where: {
+            id: organization.id,
+          },
+        }),
+      ]);
     }),
 });
 
