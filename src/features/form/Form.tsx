@@ -230,3 +230,24 @@ const Submit = ({ align, children, ...props }: FormSubmitProps) => {
 }
 
 Form.Submit = Submit;
+
+
+
+interface FormValueProps {
+  name: string;
+  value?: string | number;
+};
+
+const Value = ({ name, value }: FormValueProps) => {
+  const context = useContext(FormContext);
+
+  return (
+    <chakra.input
+      name={name}
+      value={value ?? context.defaultValues[name]}
+      hidden
+    />
+  );
+}
+
+Form.Value = Value;
