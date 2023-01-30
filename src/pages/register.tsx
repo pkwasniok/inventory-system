@@ -6,15 +6,14 @@ import { api } from '@/utils/api';
 import { Form } from '@/features/form';
 
 import {
+  useColorModeValue,
+  useToast,
   Center,
-  Card,
   Heading,
   Box,
   Text,
   Input,
-  Button,
   Link,
-  useToast
 } from '@chakra-ui/react';
 
 
@@ -22,6 +21,8 @@ import {
 const Register = () => {
   const router = useRouter();
   const toast = useToast();
+
+  const color = useColorModeValue('gray.600', 'gray.400');
 
   const { mutate: register } = api.user.register.useMutation({
     onSuccess: () => {
@@ -62,7 +63,7 @@ const Register = () => {
         </Heading>
 
         <Text
-          color="gray.600"
+          color={color}
         >
           Masz już konto? Zaloguj się <Link as={NextLink} href="/login" color="blue.600">tutaj</Link>.
         </Text>

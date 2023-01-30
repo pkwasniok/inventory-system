@@ -7,13 +7,12 @@ import { type LoginInput, loginSchema } from '@/utils/schemas';
 import { Form } from '@/features/form';
 
 import {
+  useColorModeValue,
   Center,
-  Card,
   Heading,
   Box,
   Text,
   Input,
-  Button,
   Link,
   useToast
 } from '@chakra-ui/react';
@@ -24,6 +23,8 @@ const Login = () => {
   const router = useRouter();
   const toast = useToast();
   const session = useSession();
+
+  const color = useColorModeValue('gray.600', 'gray.400');
 
   // redirect user to /app when session is valid
   useEffect(() => {
@@ -75,7 +76,7 @@ const Login = () => {
         </Heading>
 
         <Text
-          color="gray.600"
+          color={color}
         >
           Nie masz konta? Zarejestruj się <Link as={NextLink} href="/register" color="blue.600">tutaj</Link>.
         </Text>

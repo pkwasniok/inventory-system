@@ -7,6 +7,7 @@ import { userUpdateSchema, UserUpdateInput, userPasswordChangeSchema } from '@/u
 import { signOut } from 'next-auth/react';
 
 import {
+  useColorModeValue,
   useToast,
   Flex,
   Modal,
@@ -19,7 +20,6 @@ import {
   Divider,
   Input,
   Button,
-  IconButton,
 } from '@chakra-ui/react';
 
 import {
@@ -36,6 +36,8 @@ interface UserSettingsModalProps {
 
 export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
   const toast = useToast();
+
+  const color = useColorModeValue('gray.600', 'gray.400');
 
   const user = api.user.get.useQuery();
   const { mutate: updateUser } = api.user.update.useMutation({
@@ -77,7 +79,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
               aria-label="Log out"
               size="sm"
               variant="ghost"
-              color="gray.600"
+              color={color}
               rightIcon={<HiOutlineArrowRightOnRectangle size={20}/>}
               onClick={() => signOut({ callbackUrl: '/login' })}
             >

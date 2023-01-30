@@ -1,8 +1,10 @@
 import { type ReactNode } from 'react';
+
 import NextLink from 'next/link';
-import { HiOutlineBars3 } from 'react-icons/hi2';
 
 import {
+  useColorMode,
+  useColorModeValue,
   useBoolean,
   Box,
   Center,
@@ -13,6 +15,12 @@ import {
   Button,
   IconButton,
 } from '@chakra-ui/react';
+
+import {
+  HiOutlineBars3,
+  HiOutlineMoon,
+  HiOutlineSun,
+} from 'react-icons/hi2';
 
 
 
@@ -42,6 +50,9 @@ interface HomeLayoutProps {
 
 const HomeLayout = ({ children }: HomeLayoutProps) => {
   const [mobileMenu, setMobileMenu] = useBoolean(false);
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  const color = useColorModeValue('gray.200', 'gray.700');
 
   return (
     <Box
@@ -55,7 +66,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
         right={0}
         h={[16, 16, 14]}
         borderBottom="1px"
-        borderBottomColor="gray.200"
+        borderBottomColor={color}
       >
         <Flex
           maxW="1200px"
@@ -109,6 +120,14 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             >
               Rejestracja
             </Button>
+
+            <IconButton
+              size="sm"
+              variant="ghost"
+              icon={colorMode === 'light' ? <HiOutlineMoon size={18}/> : <HiOutlineSun size={18}/>}
+              onClick={toggleColorMode}
+              aria-label="Toggle color mode"
+            />
           </Flex>
 
           <IconButton

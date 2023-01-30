@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Organization } from '@prisma/client';
 
 import {
+  useColorModeValue,
   useDisclosure,
   Center,
   Flex,
@@ -45,6 +46,8 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
   const userSettingsModal = useDisclosure();
   const applicationSettingsModal = useDisclosure();
   const helpModal = useDisclosure();
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('gray.700', 'gray.300');
 
   if (session.status == 'loading' || loading == true) {
     return (
@@ -90,7 +93,7 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
         px={3}
         gap={3}
         borderBottom="1px"
-        borderBottomColor="gray.200"
+        borderBottomColor={borderColor}
       >
         <Breadcrumb spacing="8px" separator={<HiOutlineChevronRight size={18}/>}>
           <BreadcrumbItem>
@@ -99,7 +102,8 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
               href="/app"
               size="sm"
               icon={<HiOutlineHome size={20}/>}
-              aria-label=""
+              color={color}
+              aria-label="Home"
             />
           </BreadcrumbItem>
 
@@ -112,7 +116,7 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
                 size="sm"
                 leftIcon={<HiOutlineBuildingOffice2 size={20}/>}
                 transform="auto"
-                color="gray.700"
+                color={color}
               >
                 {organization.name}
               </Button>
@@ -126,7 +130,7 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
                 href={router.asPath}
                 variant="link"
                 size="sm"
-                color="gray.700"
+                color={color}
               >
                 {title}
               </Button>
