@@ -17,7 +17,9 @@ import {
 
 import {
   userUpdateSchema,
-  type UserUpdateInput
+  type UserUpdateInput,
+  userPasswordChangeSchema,
+  type UserPasswordChangeInput,
 } from "./user.schema";
 
 
@@ -28,6 +30,7 @@ export {
   organizationCreateSchema,
   organizationUpdateSchema,
   userUpdateSchema,
+  userPasswordChangeSchema,
 }
 
 export type {
@@ -36,4 +39,5 @@ export type {
   OrganizationCreateInput,
   OrganizationUpdateInput,
   UserUpdateInput,
+  UserPasswordChangeInput,
 }

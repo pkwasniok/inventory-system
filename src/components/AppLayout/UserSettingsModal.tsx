@@ -2,7 +2,7 @@ import { api } from '@/utils/api';
 
 import { Form } from '@/features/form';
 
-import { userUpdateSchema, UserUpdateInput } from '@/utils/schemas';
+import { userUpdateSchema, UserUpdateInput, userPasswordChangeSchema } from '@/utils/schemas';
 
 import { signOut } from 'next-auth/react';
 
@@ -47,6 +47,14 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
       });
     },
   });
+  const { mutate: changePassword } = api.user.changePassword.useMutation({
+    onSuccess: () => {
+      toast({
+        status: 'success',
+        title: 'Zmieniono hasło',
+      });
+    }
+  });
 
   return (
     <Modal
@@ -65,13 +73,16 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
           >
             Twoje konto
 
-            <IconButton
+            <Button
               aria-label="Log out"
               size="sm"
               variant="ghost"
-              icon={<HiOutlineArrowRightOnRectangle size={20}/>}
+              color="gray.600"
+              rightIcon={<HiOutlineArrowRightOnRectangle size={20}/>}
               onClick={() => signOut({ callbackUrl: '/login' })}
-            />
+            >
+              Wyloguj się
+            </Button>
           </Flex>
         </ModalHeader>
 
@@ -125,7 +136,11 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
 
             <Divider/>
 
-            <Form>
+            <Form
+              schema={userPasswordChangeSchema}
+              onSubmit={changePassword}
+              resetOnSubmit
+            >
               <Form.Field
                 name="currentPassword"
                 label="Aktualne hasło"
@@ -147,7 +162,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
               </Form.Submit>
             </Form>
 
-            <Heading
+            {/* <Heading
               size="sm"
               fontWeight="semibold"
             >
@@ -165,7 +180,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
               >
                 Usuń konto
               </Button>
-            </Flex>
+            </Flex> */}
           </Flex>
         </ModalBody>
 

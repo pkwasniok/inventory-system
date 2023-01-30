@@ -44,9 +44,10 @@ interface FormProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubm
   onChange?: (values: T) => void;
   isOutlined?: boolean;
   w?: string|number;
+  resetOnSubmit?: boolean;
 };
 
-export const Form = function Form<T> ({ children, defaultValues = {}, isOutlined, onSubmit, onChange, schema, w, ...props }: FormProps<T>) {
+export const Form = function Form<T> ({ children, defaultValues = {}, isOutlined, onSubmit, onChange, schema, w, resetOnSubmit, ...props }: FormProps<T>) {
   const [ errors, setErrors ] = useState<{ [key: string]: string }>({});
   const [ validateOnChange, setValidateOnChange ] = useState(false);
 
@@ -92,6 +93,10 @@ export const Form = function Form<T> ({ children, defaultValues = {}, isOutlined
 
     if (onSubmit != undefined) {
       onSubmit(values);
+    }
+
+    if (resetOnSubmit === true) {
+      e.currentTarget.reset();
     }
   }
 

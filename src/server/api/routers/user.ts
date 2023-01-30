@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
-import { registerSchema, userUpdateSchema } from '@/utils/schemas';
+import { registerSchema, userUpdateSchema, userPasswordChangeSchema } from '@/utils/schemas';
 import { TRPCError } from '@trpc/server';
-import { hashPassword } from '@/server/password';
+import { comparePassword, hashPassword } from '@/server/password';
 
 
 
@@ -41,5 +41,21 @@ export const userRouter = createTRPCRouter({
           ...input,
         },
       });
+    }),
+  changePassword: protectedProcedure
+    .input(userPasswordChangeSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (comparePassword(input.currentPassword, ctx.user.password) == true) {
+        await ctx.prisma.user.update({
+          where: {
+            id: ctx.user.id,
+          },
+          data: {
+            password: hashPassword(input.newPassword),
+          },
+        });
+      } else {
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      }
     }),
 });
