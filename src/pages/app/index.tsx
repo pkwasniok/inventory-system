@@ -202,7 +202,7 @@ const Welcome = () => {
 
                     <Button
                       as={NextLink}
-                      href={`/app/${organization.id}`}
+                      href={`/app/${organization.id}/inventory`}
                       size="sm"
                       rightIcon={<HiOutlineChevronRight size={18}/>}
                     >

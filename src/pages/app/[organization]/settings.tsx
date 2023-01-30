@@ -124,6 +124,7 @@ const OrganizationSettings = () => {
 
           <Heading
             size="sm"
+            mt={10}
           >
             Strefa niebezpieczna
           </Heading>

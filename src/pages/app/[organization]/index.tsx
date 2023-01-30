@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppLayout } from '@/components';
 import { api } from '@/utils/api';
 
 import {
-  Flex,
-  Card,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
 
 
@@ -15,59 +16,25 @@ const Organization = () => {
 
   const organization = api.organization.getById.useQuery(query.organization);
 
+  useEffect(() => {
+    if (organization.data == null) {
+      router.push('/app');
+    } else {
+      router.push(`/app/${organization.data!.id}/inventory`);
+    }
+  }, [organization, router]);
+
   return (
-    <AppLayout
-      organization={organization.data ?? undefined}
-      loading={organization.status == 'loading'}
+    <Center
+      position="fixed"
+      inset={0}
     >
-      <Flex
-        w="100%"
-        h="100%"
-        direction="row"
-        p={3}
-        gap={3}
-      >
-        <Flex
-          maxW="350px"
-          w="100%"
-          direction="column"
-        >
-          <Sidebar />
-        </Flex>
-
-        <Flex
-          flex={1}
-          direction="column"
-          gap={3}
-        >
-          <ItemsTable/>
-        </Flex>
-      </Flex>
-    </AppLayout>
+      <Spinner
+        size="xl"
+        color="blue.600"
+      />
+    </Center>
   );
-}
-
-
-
-const Sidebar = () => {
-  return (
-    <Card
-      w="100%"
-      h="100%"
-      variant="outline"
-    >
-
-    </Card>
-  );
-}
-
-
-
-const ItemsTable = () => {
-  return (
-    <>
-    </>
-  )
 }
 
 

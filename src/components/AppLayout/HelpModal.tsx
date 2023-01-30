@@ -1,4 +1,5 @@
 import {
+  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -6,6 +7,10 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
+
+import {
+  HiOutlineQuestionMarkCircle,
+} from 'react-icons/hi2';
 
 
 
@@ -25,7 +30,13 @@ export const HelpModal = ({ ...props }: HelpModalProps) => {
 
       <ModalContent>
         <ModalHeader>
-          Pomoc
+          <Flex
+            gap={3}
+            alignItems="center"
+          >
+            <HiOutlineQuestionMarkCircle size={22}/>
+            Pomoc
+          </Flex>
         </ModalHeader>
 
         <ModalBody></ModalBody>

@@ -13,6 +13,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import {
+  HiOutlineCog6Tooth,
+} from 'react-icons/hi2';
+
 
 
 interface ApplicationSettingsModalProps {
@@ -33,7 +37,14 @@ export const ApplicationSettingsModal = ({ ...props }: ApplicationSettingsModalP
 
       <ModalContent>
         <ModalHeader>
-          Ustawienia aplikacji
+          <Flex
+            gap={3}
+            alignItems="center"
+          >
+            <HiOutlineCog6Tooth size={22}/>
+
+            Ustawienia aplikacji
+          </Flex>
         </ModalHeader>
 
         <ModalBody>
