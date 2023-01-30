@@ -158,7 +158,7 @@ const AppLayout = ({ children, title, organization, loading }: AppLayoutProps) =
           size="sm"
           variant="ghost"
           colorScheme="gray"
-          icon={<Avatar size="xs" name={session.data.user?.name ?? undefined}/>}
+          icon={<Avatar size="xs"/>}
           aria-label="User settings"
           onClick={userSettingsModal.onOpen}
         />

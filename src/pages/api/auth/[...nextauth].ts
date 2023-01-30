@@ -7,6 +7,7 @@ export const authOptions: NextAuthOptions = {
   // Include user.id on session
   pages: {
     signIn: '/login',
+    signOut: '/login',
     newUser: '/register',
   },
   jwt: {

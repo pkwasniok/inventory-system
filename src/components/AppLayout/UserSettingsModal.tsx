@@ -4,7 +4,10 @@ import { Form } from '@/features/form';
 
 import { userUpdateSchema, UserUpdateInput } from '@/utils/schemas';
 
+import { signOut } from 'next-auth/react';
+
 import {
+  useToast,
   Flex,
   Modal,
   ModalOverlay,
@@ -14,9 +17,15 @@ import {
   ModalFooter,
   Heading,
   Divider,
-  Text,
-  Input
+  Input,
+  Button,
+  IconButton,
 } from '@chakra-ui/react';
+
+import {
+  HiOutlineArrowRightOnRectangle,
+} from 'react-icons/hi2';
+
 
 
 
@@ -26,8 +35,18 @@ interface UserSettingsModalProps {
 }
 
 export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
+  const toast = useToast();
+
   const user = api.user.get.useQuery();
-  const { mutate: updateUser } = api.user.update.useMutation();
+  const { mutate: updateUser } = api.user.update.useMutation({
+    onSuccess: () => {
+      user.refetch();
+      toast({
+        status: 'success',
+        title: 'Zapisano zmiany',
+      });
+    },
+  });
 
   return (
     <Modal
@@ -39,7 +58,21 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
 
       <ModalContent>
         <ModalHeader>
-          {user.data?.name ?? 'Twoje konto'}
+          <Flex
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            Twoje konto
+
+            <IconButton
+              aria-label="Log out"
+              size="sm"
+              variant="ghost"
+              icon={<HiOutlineArrowRightOnRectangle size={20}/>}
+              onClick={() => signOut({ callbackUrl: '/login' })}
+            />
+          </Flex>
         </ModalHeader>
 
         <ModalBody>
@@ -51,7 +84,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
               size="sm"
               fontWeight="semibold"
             >
-              Twoje informacje
+              Dane
             </Heading>
 
             <Divider/>
@@ -93,15 +126,17 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
             <Divider/>
 
             <Form>
-              <Form.Field name="currentPassword">
+              <Form.Field
+                name="currentPassword"
+                label="Aktualne hasło"
+              >
                 <Input type="password" />
               </Form.Field>
 
-              <Form.Field name="newPassword">
-                <Input type="password" />
-              </Form.Field>
-
-              <Form.Field name="repeatNewPassword">
+              <Form.Field
+                name="newPassword"
+                label="Nowe hasło"
+              >
                 <Input type="password" />
               </Form.Field>
 
@@ -111,6 +146,26 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
                 Zmień hasło
               </Form.Submit>
             </Form>
+
+            <Heading
+              size="sm"
+              fontWeight="semibold"
+            >
+              Strefa niebezpieczna
+            </Heading>
+
+            <Divider/>
+
+            <Flex
+              direction="row"
+              gap={6}
+            >
+              <Button
+                colorScheme="red"
+              >
+                Usuń konto
+              </Button>
+            </Flex>
           </Flex>
         </ModalBody>
 
