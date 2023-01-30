@@ -150,6 +150,8 @@ export const Form = function Form<T> ({ children, defaultValues = {}, isOutlined
           flexDirection="column"
           gap={3}
           w={w}
+          onSubmit={handleSubmit}
+          onChange={handleChange}
           {...props}
         >
           {children}

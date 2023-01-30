@@ -18,6 +18,7 @@ export const ApplicationSettingsModal = ({ ...props }: ApplicationSettingsModalP
   return (
     <Modal
       size="xl"
+      isCentered
       {...props}
     >
       <ModalOverlay/>

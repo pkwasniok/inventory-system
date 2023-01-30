@@ -1,7 +1,7 @@
-import { createTRPCRouter, publicProcedure } from '../trpc';
-import { registerSchema } from '../../../utils/schemas';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
+import { registerSchema, userUpdateSchema } from '@/utils/schemas';
 import { TRPCError } from '@trpc/server';
-import { hashPassword } from '../../../utils/password';
+import { hashPassword } from '@/server/password';
 
 
 
@@ -23,6 +23,22 @@ export const userRouter = createTRPCRouter({
         data: {
           ...input,
           password: hashPassword(input.password),
+        },
+      });
+    }),
+  get: protectedProcedure
+    .query(({ ctx }) => {
+      return ctx.user;
+    }),
+  update: protectedProcedure
+    .input(userUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.user.id,
+        },
+        data: {
+          ...input,
         },
       });
     }),

@@ -18,6 +18,7 @@ export const HelpModal = ({ ...props }: HelpModalProps) => {
   return (
     <Modal
       size="xl"
+      isCentered
       {...props}
     >
       <ModalOverlay/>

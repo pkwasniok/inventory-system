@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { prisma } from "../../../server/db";
-import { comparePassword } from "../../../utils/password";
+import { prisma } from "@/server/db";
+import { comparePassword } from "@/server/password";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
