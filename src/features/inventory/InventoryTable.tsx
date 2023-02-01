@@ -21,3 +21,7 @@ const InventoryTable = ({}: InventoryTableProps) => {
     </table>
   );
 }
+
+
+
+export default InventoryTable;
