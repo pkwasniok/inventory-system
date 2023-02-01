@@ -17,20 +17,14 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  InputGroup,
-  InputRightElement,
-  InputLeftElement,
-  Input,
-  IconButton,
   Heading,
-  Spacer,
-  Button,
-  Select,
   Divider,
   Stat,
   StatLabel,
   StatNumber,
-  StatHelpText,
+  Text,
+  Box,
+  Input,
 } from '@chakra-ui/react';
 
 import {
@@ -51,10 +45,6 @@ const Inventory = () => {
   const [ searchPhrase, setSearchPhrase ] = useState('');
 
   const organization = api.organization.getById.useQuery(query.organization);
-
-  const [ filters, setFilters ] = useState([0, 0, 0, 0]);
-
-  const color = useColorModeValue('gray.700', 'gray.500');
 
   if (organization.status == 'loading') {
     return (
@@ -95,6 +85,7 @@ const Inventory = () => {
             flexDirection="column"
           >
             <TabList>
+              <Tab>Filtry</Tab>
               <Tab>Wyszukiwanie</Tab>
               <Tab>Analityka</Tab>
             </TabList>
@@ -112,60 +103,179 @@ const Inventory = () => {
                   direction="column"
                   gap={3}
                 >
-                  <Heading size="sm" fontWeight="semibold">Wyszukiwanie</Heading>
+                  <Heading size="sm">Księgi</Heading>
 
-                  <SearchBar/>
+                  <Divider/>
 
-                  <Heading size="sm" fontWeight="semibold" mt={6}>Filtry</Heading>
-
-                  {filters.map((filter) => (
-                    <Flex
-                      w="100%"
-                      h={12}
-                      border="1px"
-                      borderColor="gray.600"
-                      rounded={6}
-                      p={2}
-                      gap={2}
-                      alignItems="center"
-                    >
-                      <Select variant="filled" size="sm" flexShrink={1}>
-                        <option>Grupa</option>
-                        <option>Pomieszczenie</option>
-                        <option>Księga</option>
-                      </Select>
-
-                      <Select variant="filled" size="sm" flexShrink={1}>
-                        <option>=</option>
-                        <option>≠</option>
-                      </Select>
-
-                      <Input
-                        size="sm"
-                        variant="filled"
-                      />
-
-                      <Spacer/>
-
-                      <IconButton
-                        variant="ghost"
-                        size="sm"
-                        aria-label="Delete filter"
-                        color={color}
-                        icon={<HiOutlineTrash size={20}/>}
-                        onClick={() => setFilters(filters.splice(1))}
-                      />
-                    </Flex>
-                  ))}
-
-                  <Button
-                    variant="ghost"
-                    leftIcon={<HiOutlinePlus size={20}/>}
-                    justifyContent="start"
-                    onClick={() => setFilters([ ...filters, 0 ])}
+                  <Flex
+                    direction="row"
+                    gap={3}
+                    flexWrap="wrap"
                   >
-                    Dodaj
-                  </Button>
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="blue.800"
+                      opacity={0.7}
+                    >
+                      Środki trwałe
+                    </Box>
+
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="blue.800"
+                      opacity={0.7}
+                    >
+                      Środki nietrwałe
+                    </Box>
+                  </Flex>
+
+                  <Heading size="sm" mt={10}>Pomieszczenia</Heading>
+
+                  <Divider/>
+
+                  <Input
+                    size="sm"
+                    variant="filled"
+                  />
+
+                  <Flex
+                    w="100%"
+                    direction="row"
+                    flexWrap="wrap"
+                    gap={3}
+                  >
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="green.800"
+                      opacity={0.7}
+                    >
+                      Pokój nauczycielski
+                    </Box>
+
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="green.800"
+                      opacity={0.7}
+                    >
+                      Pomieszczenie gospodarcze
+                    </Box>
+
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="green.800"
+                      opacity={0.7}
+                    >
+                      Pracownia biologiczna
+                    </Box>
+                  </Flex>
+
+                  <Heading size="sm" mt={10}>Grupy</Heading>
+
+                  <Divider/>
+
+                  <Input
+                    size="sm"
+                    variant="filled"
+                  />
+
+                  <Flex
+                    w="100%"
+                    direction="row"
+                    flexWrap="wrap"
+                    gap={3}
+                  >
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="red.800"
+                      opacity={0.7}
+                    >
+                      Komputery
+                    </Box>
+
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="red.800"
+                      opacity={0.7}
+                    >
+                      Drukarki
+                    </Box>
+
+                    <Box
+                      fontSize={14}
+                      py={1}
+                      px={2}
+                      borderRadius={3}
+                      bg="red.800"
+                      opacity={0.7}
+                    >
+                      Ławki
+                    </Box>
+                  </Flex>
+                </Flex>
+              </TabPanel>
+
+              <TabPanel
+                h="95%"
+                boxSizing="border-box"
+                border="1px"
+                borderColor="gray.600"
+                borderBottomRadius={6}
+              >
+                <Flex
+                  h="100%"
+                  direction="column"
+                  gap={3}
+                >
+                  <SearchBar
+                    value={searchPhrase}
+                    onChange={(e) => setSearchPhrase(e.target.value)}
+                    onClear={() => setSearchPhrase('')}
+                  />
+
+                  <Flex
+                    h="100%"
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
+                  >
+                    <Heading size="md" fontWeight="semibold">
+                      Brak dopasowań
+                    </Heading>
+
+                    {searchPhrase == '' &&
+                      <Text>
+                        Wpisz frazę wyszukiwania w polu powyżej
+                      </Text>
+                    }
+
+                    {searchPhrase != '' &&
+                      <Text>
+                        Dla frazy "{searchPhrase}"
+                      </Text>
+                    }
+                  </Flex>
                 </Flex>
               </TabPanel>
 

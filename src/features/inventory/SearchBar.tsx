@@ -14,9 +14,11 @@ import {
 
 
 
-interface SearchBarProps extends InputProps {}
+interface SearchBarProps extends InputProps {
+  onClear: () => void;
+}
 
-export const SearchBar = ({ value, ...props }: SearchBarProps) => {
+export const SearchBar = ({ value, onClear, ...props }: SearchBarProps) => {
   return (
     <InputGroup>
       <InputLeftElement>
@@ -34,6 +36,7 @@ export const SearchBar = ({ value, ...props }: SearchBarProps) => {
             size="xs"
             icon={<HiOutlineXMark size={18}/>}
             aria-label="Clear searchbar"
+            onClick={onClear}
           />
         </InputRightElement>
       }
