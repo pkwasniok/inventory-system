@@ -1,7 +1,6 @@
 import { createTRPCRouter } from './trpc';
 import { userRouter } from './routers/user';
 import { organizationRouter } from './routers/organization';
-import { bookRouter } from './routers/book';
 import { roomRouter } from './routers/room';
 import { groupRouter } from './routers/group';
 import { itemRouter } from './routers/item';
@@ -14,7 +13,6 @@ import { itemRouter } from './routers/item';
 export const appRouter = createTRPCRouter({
   user: userRouter,
   organization: organizationRouter,
-  book: bookRouter,
   room: roomRouter,
   group: groupRouter,
   item: itemRouter,
