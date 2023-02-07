@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
-import { registerSchema, userUpdateSchema, userPasswordChangeSchema } from '@/schemas';
+import { UserRegisterSchema, UserUpdateSchema, UserPasswordUpdateSchema } from '@/schemas/user';
 import { TRPCError } from '@trpc/server';
 import { comparePassword, hashPassword } from '@/server/password';
 
@@ -7,7 +7,7 @@ import { comparePassword, hashPassword } from '@/server/password';
 
 export const userRouter = createTRPCRouter({
   register: publicProcedure
-    .input(registerSchema)
+    .input(UserRegisterSchema)
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
@@ -31,7 +31,7 @@ export const userRouter = createTRPCRouter({
       return ctx.user;
     }),
   update: protectedProcedure
-    .input(userUpdateSchema)
+    .input(UserUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.user.update({
         where: {
@@ -43,19 +43,19 @@ export const userRouter = createTRPCRouter({
       });
     }),
   changePassword: protectedProcedure
-    .input(userPasswordChangeSchema)
+    .input(UserPasswordUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      if (comparePassword(input.currentPassword, ctx.user.password) == true) {
-        await ctx.prisma.user.update({
-          where: {
-            id: ctx.user.id,
-          },
-          data: {
-            password: hashPassword(input.newPassword),
-          },
-        });
-      } else {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      if(comparePassword(input.currentPassword, ctx.user.password) == false) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.user.id,
+        },
+        data: {
+          password: hashPassword(input.newPassword),
+        },
+      });
     }),
 });

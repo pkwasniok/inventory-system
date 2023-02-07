@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { HomeLayout } from '@/components';
-import { type LoginInput, loginSchema } from '@/schemas';
+import { UserLoginSchema, type UserLoginInput } from '@/schemas/user';
 import { Form } from '@/features/form';
 
 import {
@@ -33,7 +33,7 @@ const Login = () => {
     }
   }, [session, router]);
 
-  const handleSubmit = async (data: LoginInput) => {
+  const handleSubmit = async (data: UserLoginInput) => {
     const result = await signIn('credentials', {
       email: data.email,
       password: data.password,
@@ -85,7 +85,7 @@ const Login = () => {
 
         <Form
           w={350}
-          schema={loginSchema}
+          schema={UserLoginSchema}
           onSubmit={handleSubmit}
           isOutlined
         >

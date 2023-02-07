@@ -9,22 +9,6 @@ import {
 } from './register.schema';
 
 import {
-  organizationCreateSchema,
-  type OrganizationCreateInput,
-  organizationUpdateSchema,
-  type OrganizationUpdateInput,
-  organizationIdSchema,
-  type OrganizationId,
-} from './organization';
-
-import {
-  userUpdateSchema,
-  type UserUpdateInput,
-  userPasswordChangeSchema,
-  type UserPasswordChangeInput,
-} from './user.schema';
-
-import {
   bookCreateSchema,
   type BookCreateInput,
   bookUpdateSchema,
@@ -36,11 +20,6 @@ import {
 export {
   loginSchema,
   registerSchema,
-  organizationIdSchema,
-  organizationCreateSchema,
-  organizationUpdateSchema,
-  userUpdateSchema,
-  userPasswordChangeSchema,
   bookCreateSchema,
   bookUpdateSchema,
 }
@@ -48,11 +27,6 @@ export {
 export type {
   LoginInput,
   RegisterInput,
-  OrganizationId,
-  OrganizationCreateInput,
-  OrganizationUpdateInput,
-  UserUpdateInput,
-  UserPasswordChangeInput,
   BookCreateInput,
   BookUpdateInput,
 }

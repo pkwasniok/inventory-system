@@ -1,7 +1,7 @@
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { HomeLayout } from '@/components';
-import { registerSchema } from '@/schemas';
+import { UserRegisterSchema } from '@/schemas/user';
 import { api } from '@/utils/api';
 import { Form } from '@/features/form';
 
@@ -72,7 +72,7 @@ const Register = () => {
 
         <Form
           w={350}
-          schema={registerSchema}
+          schema={UserRegisterSchema}
           onSubmit={register}
           isOutlined
         >
@@ -113,4 +113,3 @@ const Register = () => {
 
 
 export default Register;
-
