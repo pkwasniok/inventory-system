@@ -48,7 +48,7 @@ const Inventory = () => {
 
   return (
     <AppLayout
-      organization={organization.data ?? undefined}
+      organization={organization.data}
       title="Inwentaryzacja"
     >
       <Flex

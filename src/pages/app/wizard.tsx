@@ -1,7 +1,7 @@
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 import { AppLayout } from '@/components';
-import { organizationCreateSchema, type OrganizationCreateInput } from '@/schemas';
+import { OrganizationCreateSchema, type OrganizationCreateInput } from '@/schemas/organization';
 import { api } from '@/utils/api';
 import UndrawSetupWizard from '@public/undraw/undraw_setup_wizard.svg';
 import { Form } from '@/features/form';
@@ -70,7 +70,7 @@ const Wizard = () => {
 
         <Form
           w={350}
-          schema={organizationCreateSchema}
+          schema={OrganizationCreateSchema}
           onSubmit={handleSubmit}
           isOutlined
         >

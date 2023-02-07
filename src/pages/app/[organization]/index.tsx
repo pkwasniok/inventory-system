@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { AppLayout } from '@/components';
 import { api } from '@/utils/api';
 
 import {
@@ -17,7 +16,7 @@ const Organization = () => {
   const organization = api.organization.getById.useQuery(query.organization);
 
   useEffect(() => {
-    if (organization.data == null) {
+    if (organization.data == undefined) {
       router.push('/app');
     } else {
       router.push(`/app/${organization.data!.id}/inventory`);

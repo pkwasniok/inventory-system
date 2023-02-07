@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc';
-import { organizationCreateSchema, organizationUpdateSchema } from '../../../schemas';
+import { OrganizationCreateSchema, OrganizationUpdateSchema } from '@/schemas/organization';
 import { TRPCError } from '@trpc/server';
 import { accessibleBy } from '@casl/prisma';
 import { z } from 'zod';
@@ -7,76 +7,43 @@ import { subject } from '@casl/ability';
 
 
 
-const ORGANIZATION_DEFAULT_COLOR = '#2b6cb0';
-
-
-
 export const organizationRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(organizationCreateSchema)
+    .input(OrganizationCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      if (ctx.ability.can('create', 'Organization')) {
-        return await ctx.prisma.organization.create({
-          data: {
-            ...input,
-            color: ORGANIZATION_DEFAULT_COLOR,
-            users: {
-              create: {
-                userId: ctx.user.id,
-              },
-            },
-          },
-        });
-      } else {
+      if (ctx.ability.cannot('create', 'Organization')) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
-    }),
-  getAll: protectedProcedure
-    .query(async ({ ctx }) => {
-      return await ctx.prisma.organization.findMany({
-        where: accessibleBy(ctx.ability).Organization,
-      });
-    }),
-  getById: protectedProcedure
-    .input(z.string().uuid().nullish())
-    .query(async ({ ctx, input }) => {
-      if (input == undefined || input == null) {
-        return null;
-      }
 
-      return await ctx.prisma.organization.findFirst({
-        where: {
-          AND: [
-            accessibleBy(ctx.ability).Organization,
-            { id: input },
-          ],
+      return await ctx.prisma.organization.create({
+        data: {
+          ...input,
+          users: {
+            create: {
+              userId: ctx.user.id,
+            },
+          },
         },
       });
     }),
   update: protectedProcedure
-    .input(organizationUpdateSchema)
-    .mutation( async ({ ctx, input }) => {
+    .input(OrganizationUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
       const organization = await ctx.prisma.organization.findUnique({
         where: {
           id: input.id,
         },
-        include: {
-          users: true,
-        },
       });
 
-      if (organization == null || ctx.ability.can('update', subject('Organization', organization)) == false) {
+      if (organization == null || ctx.ability.cannot('update', subject('Organization', organization))) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      await ctx.prisma.organization.update({
+      return await ctx.prisma.organization.update({
         where: {
-          id: input.id,
+          id: organization.id,
         },
-        data: {
-          ...input,
-          id: undefined,
-        },
+        data: input,
       });
     }),
   delete: protectedProcedure
@@ -86,27 +53,34 @@ export const organizationRouter = createTRPCRouter({
         where: {
           id: input,
         },
-        include: {
-          users: true,
-        },
       });
 
-      if (organization == null || ctx.ability.can('delete', subject('Organization', organization)) == false) {
+      if (organization == null || ctx.ability.cannot('delete', subject('Organization', organization))) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      await ctx.prisma.$transaction([
-        ctx.prisma.userOnOrganization.deleteMany({
-          where: {
-            organizationId: organization.id,
-          },
-        }),
-        ctx.prisma.organization.delete({
-          where: {
-            id: organization.id,
-          },
-        }),
-      ]);
+      return await ctx.prisma.organization.delete({
+        where: {
+          id: organization.id,
+        },
+      });
+    }),
+  getAll: protectedProcedure
+    .query(async ({ ctx }) => {
+      return await ctx.prisma.organization.findMany({
+        where: accessibleBy(ctx.ability).Organization,
+      });
+    }),
+  getById: protectedProcedure
+    .input(z.string().uuid())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.organization.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ctx.ability).Organization,
+            { id: input },
+          ],
+        },
+      }) ?? undefined;
     }),
 });
-

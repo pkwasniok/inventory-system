@@ -6,7 +6,7 @@ import { api } from '@/utils/api';
 
 import { Form } from '@/features/form';
 
-import { organizationUpdateSchema, OrganizationUpdateInput } from '@/schemas';
+import { OrganizationUpdateSchema, type OrganizationUpdateInput } from '@/schemas/organization';
 
 import {
   useToast,
@@ -15,7 +15,6 @@ import {
   Heading,
   Divider,
   Input,
-  Button,
 } from '@chakra-ui/react';
 
 
@@ -44,29 +43,13 @@ const OrganizationSettings = () => {
       }
     }
   });
-  const { mutate: deleteOrganization } = api.organization.delete.useMutation({
-    onSuccess: () => {
-      router.push('/app');
-      toast({
-        status: 'success',
-        title: 'Zapisano zmiany',
-      });
-    },
-    onError: (error) => {
-      if (error.data?.code === 'FORBIDDEN') {
-        toast({
-          status: 'error',
-          title: 'Nie udało się zapisać',
-          description: 'Nie posiadasz uprawnień do wykonania tej operacji',
-        });
-      }
-    }
-  });
+
+
 
   return (
     <AppLayout
       title="Ustawienia"
-      organization={organization.data ?? undefined}
+      organization={organization.data}
       loading={organization.status == 'loading'}
     >
       <Center
@@ -96,7 +79,7 @@ const OrganizationSettings = () => {
           <Divider/>
 
           <Form
-            schema={organizationUpdateSchema}
+            schema={OrganizationUpdateSchema}
             defaultValues={organization.data as OrganizationUpdateInput}
             onSubmit={updateOrganization}
           >
@@ -116,14 +99,6 @@ const OrganizationSettings = () => {
 
           {/* <Heading
             size="sm"
-          >
-            Członkowie
-          </Heading>
-
-          <Divider/> */}
-
-          <Heading
-            size="sm"
             mt={10}
           >
             Strefa niebezpieczna
@@ -141,7 +116,7 @@ const OrganizationSettings = () => {
             >
               Usuń organizację
             </Button>
-          </Flex>
+          </Flex> */}
         </Flex>
       </Center>
     </AppLayout>

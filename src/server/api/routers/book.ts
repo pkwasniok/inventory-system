@@ -22,11 +22,16 @@ export const bookRouter = createTRPCRouter({
         },
       });
 
-      if (booksCount < BOOKS_LIMIT) {
-        await ctx.prisma.book.createMany({
-          data: [],
-        });
+      if (booksCount + input.books.length >= BOOKS_LIMIT) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
+
+      await ctx.prisma.book.createMany({
+        data: input.books.map((book) => ({
+          organizationId: input.organizationId,
+          ...book,
+        })),
+      });
     }),
   update: protectedProcedure
     .input(bookUpdateSchema)

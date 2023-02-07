@@ -15,7 +15,7 @@ import {
   type OrganizationUpdateInput,
   organizationIdSchema,
   type OrganizationId,
-} from './organization.schema';
+} from './organization';
 
 import {
   userUpdateSchema,

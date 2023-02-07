@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,12 +14,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -36,10 +36,10 @@ model Session {
 
 model User {
   id            String               @id @default(cuid())
-  name          String?
-  email         String?              @unique
+  name          String?              @db.VarChar(255)
+  email         String?              @unique @db.VarChar(255)
   emailVerified DateTime?
-  password      String?
+  password      String?              @db.Text
   accounts      Account[]
   sessions      Session[]
   organizations UserOnOrganization[]
@@ -54,15 +54,15 @@ model VerificationToken {
 }
 
 // Bussiness logic
+
 model Organization {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  books Book[]
-  rooms Room[]
-
-  name  String
-  color String
   users UserOnOrganization[]
+
+  name        String @db.VarChar(255)
+  description String @db.Text
+  color       String @db.VarChar(6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,7 +72,7 @@ model UserOnOrganization {
   user           User         @relation(fields: [userId], references: [id])
   userId         String
   organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
+  organizationId String       @db.Uuid
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,63 +81,44 @@ model UserOnOrganization {
 }
 
 model Book {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
-  groups         Group[]
-  item           Item[]
-
-  name        String
-  description String @default("")
-  color       String @default("")
+  name        String @db.VarChar(255)
+  description String @db.Text
+  color       String @db.VarChar(6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Room {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
-  items          Item[]
-
-  name        String
-  description String @default("")
-  color       String @default("")
+  name        String @db.VarChar(255)
+  description String @db.Text
+  color       String @db.VarChar(6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Group {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
 
-  book   Book   @relation(fields: [bookId], references: [id])
-  bookId String
-  items  Item[]
-
-  name        String
-  description String @default("")
-  color       String @default("")
+  name        String @db.VarChar(255)
+  description String @db.Text
+  color       String @db.VarChar(6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Item {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
 
-  book   Book    @relation(fields: [bookId], references: [id])
-  bookId String
-  room   Room    @relation(fields: [roomId], references: [id])
-  roomId String
-  groups Group[]
-
-  name        String
-  description String @default("")
-  color       String @default("")
+  name        String @db.VarChar(255)
+  description String @db.Text
+  color       String @db.VarChar(6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
