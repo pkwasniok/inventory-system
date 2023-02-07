@@ -11,7 +11,7 @@ export const organizationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(OrganizationCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      if (ctx.ability.cannot('create', 'Organization')) {
+      if (ctx.defineAbility(ctx.user).cannot('create', 'Organization')) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
@@ -35,7 +35,7 @@ export const organizationRouter = createTRPCRouter({
         },
       });
 
-      if (organization == null || ctx.ability.cannot('update', subject('Organization', organization))) {
+      if (organization == null || ctx.defineAbility(ctx.user).cannot('update', subject('Organization', organization))) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
@@ -55,7 +55,7 @@ export const organizationRouter = createTRPCRouter({
         },
       });
 
-      if (organization == null || ctx.ability.cannot('delete', subject('Organization', organization))) {
+      if (organization == null || ctx.defineAbility(ctx.user).cannot('delete', subject('Organization', organization))) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
@@ -68,7 +68,7 @@ export const organizationRouter = createTRPCRouter({
   getAll: protectedProcedure
     .query(async ({ ctx }) => {
       return await ctx.prisma.organization.findMany({
-        where: accessibleBy(ctx.ability).Organization,
+        where: accessibleBy(ctx.defineAbility(ctx.user)).Organization,
       });
     }),
   getById: protectedProcedure
@@ -77,7 +77,7 @@ export const organizationRouter = createTRPCRouter({
       return await ctx.prisma.organization.findFirst({
         where: {
           AND: [
-            accessibleBy(ctx.ability).Organization,
+            accessibleBy(ctx.defineAbility(ctx.user)).Organization,
             { id: input },
           ],
         },

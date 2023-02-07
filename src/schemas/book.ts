@@ -2,22 +2,32 @@ import { z } from 'zod';
 
 
 
-export const bookIdSchema = z.string().uuid();
-export type BookId = z.infer<typeof bookIdSchema>;
+// type Book = {
+//   id: string; <- auto
+//   organizationId: string;
+//   name: string;
+//   description: string;
+//   color: string;
+//   createdAt: Date; <- auto
+//   updatedAt: Date; <- auto
+// }
 
 
 
-export const bookCreateSchema = z.object({
+const BookSchema = z.object({
   name: z.string().min(3),
   description: z.string().default(''),
+  color: z.string().default("000000"),
 });
-export type BookCreateInput = z.infer<typeof bookCreateSchema>;
 
 
 
-export const bookUpdateSchema = z.object({
-  id: bookIdSchema,
-  name: z.string().min(3),
-  description: z.string().default(''),
-});
-export type BookUpdateInput = z.infer<typeof bookUpdateSchema>;
+export const BookCreateSchema = BookSchema;
+export type BookCreateInput = z.infer<typeof BookCreateSchema>;
+
+
+
+export const BookUpdateSchema = z.object({
+  id: z.string().uuid(),
+}).merge(BookSchema);
+export type BookUpdateInput = z.infer<typeof BookUpdateSchema>;

@@ -1,6 +1,6 @@
 import { AbilityBuilder, type PureAbility } from '@casl/ability';
 import { createPrismaAbility, type PrismaQuery, type Subjects } from '@casl/prisma';
-import { type User, type Organization, type Book, type Room, type Group, type Item } from '@prisma/client';
+import { type User, type Organization, type Book, type Room, type Group, type Item, type UserOnOrganization } from '@prisma/client';
 
 
 
@@ -10,16 +10,22 @@ export type AppAbility = PureAbility<[AppAction, AppSubject], PrismaQuery>;
 
 
 
-export const defineAbilityFor = (user: User|null) => {
+export const defineAbility = (user?: User, organization?: Organization & { users: UserOnOrganization[] }) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
   // Return empty ability when user is unauthenticated
-  if (user == null) {
+  if (user == undefined) {
     return build();
   }
 
   // Organization
   can('manage', 'Organization');
+
+  const userOnOrganization = organization?.users.find((userOnOrganization) => userOnOrganization.userId == user.id);
+
+  if (userOnOrganization == undefined) {
+    return build();
+  }
 
   // Book
   can('manage', 'Book');
