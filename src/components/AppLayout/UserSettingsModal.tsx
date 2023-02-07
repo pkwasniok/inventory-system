@@ -2,7 +2,7 @@ import { api } from '@/utils/api';
 
 import { Form } from '@/features/form';
 
-import { userUpdateSchema, UserUpdateInput, userPasswordChangeSchema } from '@/schemas';
+import { type UserUpdateInput, UserUpdateSchema, UserPasswordUpdateSchema } from '@/schemas/user';
 
 import { signOut } from 'next-auth/react';
 
@@ -103,7 +103,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
             <Divider/>
 
             <Form
-              schema={userUpdateSchema}
+              schema={UserUpdateSchema}
               defaultValues={user.data as UserUpdateInput}
               onSubmit={updateUser}
             >
@@ -139,7 +139,7 @@ export const UserSettingsModal = ({ ...props }: UserSettingsModalProps) => {
             <Divider/>
 
             <Form
-              schema={userPasswordChangeSchema}
+              schema={UserPasswordUpdateSchema}
               onSubmit={changePassword}
               resetOnSubmit
             >
