@@ -16,6 +16,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Button,
 } from '@chakra-ui/react';
 
 import { SearchBar } from '@/features/inventory/search';
@@ -31,6 +32,23 @@ const Inventory = () => {
   const [ searchPhrase, setSearchPhrase ] = useState('');
 
   const organization = api.organization.getById.useQuery(query.organization);
+  const { mutate: createBook } = api.book.create.useMutation({ onSuccess: () => refetch() });
+  const { data: books, refetch }= api.book.getByOrganization.useQuery(organization.data?.id ?? '', { enabled: false });
+
+  const handleFetch = async () => {
+    refetch();
+  }
+
+  const handleAdd = async () => {
+    createBook({
+      organizationId: organization.data!.id,
+      books: [
+        {
+          name: 'Test'
+        }
+      ],
+    });
+  }
 
   if (organization.status == 'loading') {
     return (
@@ -125,7 +143,19 @@ const Inventory = () => {
           h="100%"
           p={3}
         >
-          <InventoryTable/>
+          <Button
+            onClick={handleAdd}
+          >
+            Dodaj
+          </Button>
+
+          <Button
+            onClick={handleFetch}
+          >
+            Ilość ksiąg: {books?.length ?? '0'}
+          </Button>
+
+          {/* <InventoryTable/> */}
         </Card>
       </Flex>
     </AppLayout>

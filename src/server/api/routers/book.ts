@@ -19,33 +19,51 @@ export const bookRouter = createTRPCRouter({
       books: z.array(BookCreateSchema),
     }))
     .mutation(async ({ ctx, input }) => {
-      const organization = await ctx.prisma.organization.findUnique({
+      const organization = await ctx.prisma.organization.findFirst({
         where: {
-          id: input.organizationId,
-        },
-        include: {
-          users: true,
+          AND: [
+            { id: input.organizationId },
+            accessibleBy(ctx.defineAbility(ctx.user)).Organization,
+          ],
         },
       });
 
-      if (organization == null || ctx.defineAbility(ctx.user, organization).cannot('create', 'Book')) {
-        throw new TRPCError({ code: 'FORBIDDEN' });
-      }
-
-      await ctx.prisma.book.createMany({
-        data: input.books.map((book) => ({
-          organizationId: organization.id,
-          ...book,
-        })),
-      });
     }),
   update: protectedProcedure
     .input(z.object({
       organizationId: z.string().uuid(),
       books: z.array(BookUpdateSchema),
     }))
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const books = await ctx.prisma.book.findMany({
+        where: {
+          AND: [
+            accessibleBy(ctx.defineAbility(ctx.user)).Book,
+            { id: { in: input.books.map((book) => book.id) } }
+          ]
+        },
+        include: {
+          organization: {
+            select: {
+              users: true,
+            }
+          },
+        }
+      });
 
+      console.log(books);
+    }),
+  getByOrganization: protectedProcedure
+    .input(z.string().uuid())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.book.findMany({
+        where: {
+          AND: [
+            { organizationId: input },
+            accessibleBy(ctx.defineAbility(ctx.user)).Book,
+          ],
+        },
+      });
     }),
 });
 

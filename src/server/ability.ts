@@ -10,7 +10,7 @@ export type AppAbility = PureAbility<[AppAction, AppSubject], PrismaQuery>;
 
 
 
-export const defineAbility = (user?: User, organization?: Organization & { users: UserOnOrganization[] }) => {
+export const defineAbility = (user?: User) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
   // Return empty ability when user is unauthenticated
@@ -19,16 +19,10 @@ export const defineAbility = (user?: User, organization?: Organization & { users
   }
 
   // Organization
-  can('manage', 'Organization');
-
-  const userOnOrganization = organization?.users.find((userOnOrganization) => userOnOrganization.userId == user.id);
-
-  if (userOnOrganization == undefined) {
-    return build();
-  }
+  can('manage', 'Organization', { users: { some: { userId: user.id } } });
 
   // Book
-  can('manage', 'Book');
+  can('manage', 'Book', { organization: { users: { some: { userId: user.id } } } });
 
   // Room
   can('manage', 'Room');
