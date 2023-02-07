@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import NextImage from 'next/image';
 import { AppLayout } from '@/components';
 import { api } from '@/utils/api';
-import { organizationCreateSchema } from '@/utils/schemas';
+import { organizationCreateSchema } from '@/schemas';
 import UndrawHello from '@public/undraw/undraw_hello.svg';
 import { Form } from '@/features/form';
 

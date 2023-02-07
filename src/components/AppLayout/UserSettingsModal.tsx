@@ -2,7 +2,7 @@ import { api } from '@/utils/api';
 
 import { Form } from '@/features/form';
 
-import { userUpdateSchema, UserUpdateInput, userPasswordChangeSchema } from '@/utils/schemas';
+import { userUpdateSchema, UserUpdateInput, userPasswordChangeSchema } from '@/schemas';
 
 import { signOut } from 'next-auth/react';
 

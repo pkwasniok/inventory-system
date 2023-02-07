@@ -1,7 +1,7 @@
 import NextImage from 'next/image';
 import { useRouter } from 'next/router';
 import { AppLayout } from '@/components';
-import { organizationCreateSchema, type OrganizationCreateInput } from '@/utils/schemas';
+import { organizationCreateSchema, type OrganizationCreateInput } from '@/schemas';
 import { api } from '@/utils/api';
 import UndrawSetupWizard from '@public/undraw/undraw_setup_wizard.svg';
 import { Form } from '@/features/form';

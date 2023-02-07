@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { HomeLayout } from '@/components';
-import { type LoginInput, loginSchema } from '@/utils/schemas';
+import { type LoginInput, loginSchema } from '@/schemas';
 import { Form } from '@/features/form';
 
 import {

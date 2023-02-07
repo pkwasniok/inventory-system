@@ -1,7 +1,7 @@
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { HomeLayout } from '@/components';
-import { registerSchema } from '@/utils/schemas';
+import { registerSchema } from '@/schemas';
 import { api } from '@/utils/api';
 import { Form } from '@/features/form';
 

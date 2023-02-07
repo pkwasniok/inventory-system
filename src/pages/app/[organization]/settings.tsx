@@ -6,7 +6,7 @@ import { api } from '@/utils/api';
 
 import { Form } from '@/features/form';
 
-import { organizationUpdateSchema, OrganizationUpdateInput } from '@/utils/schemas';
+import { organizationUpdateSchema, OrganizationUpdateInput } from '@/schemas';
 
 import {
   useToast,

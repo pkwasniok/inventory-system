@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc';
-import { organizationCreateSchema, organizationUpdateSchema } from '../../../utils/schemas';
+import { organizationCreateSchema, organizationUpdateSchema } from '../../../schemas';
 import { TRPCError } from '@trpc/server';
 import { accessibleBy } from '@casl/prisma';
 import { z } from 'zod';

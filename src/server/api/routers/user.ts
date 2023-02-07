@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
-import { registerSchema, userUpdateSchema, userPasswordChangeSchema } from '@/utils/schemas';
+import { registerSchema, userUpdateSchema, userPasswordChangeSchema } from '@/schemas';
 import { TRPCError } from '@trpc/server';
 import { comparePassword, hashPassword } from '@/server/password';
 
