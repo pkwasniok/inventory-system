@@ -1,6 +1,9 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc';
+
 import { OrganizationCreateSchema, OrganizationUpdateSchema } from '@/schemas/organization';
+
 import { TRPCError } from '@trpc/server';
+
 import { z } from 'zod';
 
 
@@ -10,6 +13,7 @@ const ORGANIZATIONS_LIMIT = 10;
 
 
 export const organizationRouter = createTRPCRouter({
+
   create: protectedProcedure
     .input(OrganizationCreateSchema)
     .mutation(async ({ ctx, input }) => {
@@ -38,6 +42,7 @@ export const organizationRouter = createTRPCRouter({
         },
       });
     }),
+
   update: protectedProcedure
     .input(OrganizationUpdateSchema)
     .mutation(async ({ ctx, input }) => {
@@ -66,11 +71,13 @@ export const organizationRouter = createTRPCRouter({
         }
       });
     }),
+
   delete: protectedProcedure
     .input(z.string().uuid())
     .mutation(async ({ ctx, input }) => {
 
     }),
+
   getAll: protectedProcedure
     .query(async ({ ctx }) => {
       return await ctx.prisma.organization.findMany({
@@ -83,6 +90,7 @@ export const organizationRouter = createTRPCRouter({
         },
       });
     }),
+
   getById: protectedProcedure
     .input(z.string().uuid())
     .query(async ({ ctx, input }) => {
@@ -97,4 +105,5 @@ export const organizationRouter = createTRPCRouter({
         },
       }) ?? undefined;
     }),
+
 });

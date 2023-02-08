@@ -41,7 +41,7 @@ export const defineAbilityFor = async (user?: User, organization?: Organization)
     return build();
   }
 
-  can('manage', 'Book');
+  can('manage', 'Book', { organizationId: _organization.id });
   can('manage', 'Room');
   can('manage', 'Group');
   can('manage', 'Item');
