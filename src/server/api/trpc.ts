@@ -22,12 +22,11 @@ import { type Session } from "next-auth";
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
 import { type User } from '@prisma/client';
-import { defineAbility } from '../ability';
+import { defineAbilityFor } from '../ability';
 
 type CreateContextOptions = {
   session: Session | undefined;
   user: User | undefined;
-  defineAbility: typeof defineAbility;
 };
 
 /**
@@ -43,7 +42,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     user: opts.user,
-    defineAbility: opts.defineAbility,
+    defineAbilityFor,
     prisma,
   };
 };
@@ -72,7 +71,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   return createInnerTRPCContext({
     session,
     user,
-    defineAbility,
   });
 };
 

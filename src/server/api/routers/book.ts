@@ -19,14 +19,6 @@ export const bookRouter = createTRPCRouter({
       books: z.array(BookCreateSchema),
     }))
     .mutation(async ({ ctx, input }) => {
-      const organization = await ctx.prisma.organization.findFirst({
-        where: {
-          AND: [
-            { id: input.organizationId },
-            accessibleBy(ctx.defineAbility(ctx.user)).Organization,
-          ],
-        },
-      });
 
     }),
   update: protectedProcedure
@@ -35,35 +27,12 @@ export const bookRouter = createTRPCRouter({
       books: z.array(BookUpdateSchema),
     }))
     .mutation(async ({ ctx, input }) => {
-      const books = await ctx.prisma.book.findMany({
-        where: {
-          AND: [
-            accessibleBy(ctx.defineAbility(ctx.user)).Book,
-            { id: { in: input.books.map((book) => book.id) } }
-          ]
-        },
-        include: {
-          organization: {
-            select: {
-              users: true,
-            }
-          },
-        }
-      });
 
-      console.log(books);
     }),
   getByOrganization: protectedProcedure
     .input(z.string().uuid())
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.book.findMany({
-        where: {
-          AND: [
-            { organizationId: input },
-            accessibleBy(ctx.defineAbility(ctx.user)).Book,
-          ],
-        },
-      });
+      return [];
     }),
 });
 
