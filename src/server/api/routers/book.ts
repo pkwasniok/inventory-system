@@ -8,8 +8,6 @@ import { accessibleBy } from '@casl/prisma';
 
 import { z } from 'zod';
 
-import { subject } from '@casl/ability';
-
 
 
 export const bookRouter = createTRPCRouter({

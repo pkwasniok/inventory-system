@@ -60,6 +60,7 @@ model Organization {
 
   users UserOnOrganization[]
   books Book[]
+  rooms Room[]
 
   name        String @db.VarChar(255)
   description String @db.Text
@@ -97,6 +98,9 @@ model Book {
 
 model Room {
   id String @id @default(uuid()) @db.Uuid
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @db.Uuid
 
   name        String @db.VarChar(255)
   description String @db.Text

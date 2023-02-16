@@ -17,6 +17,7 @@ import {
   TabPanels,
   TabPanel,
   Button,
+  Divider,
 } from '@chakra-ui/react';
 
 import { SearchBar } from '@/features/inventory/search';
@@ -32,16 +33,21 @@ const Inventory = () => {
   const [ searchPhrase, setSearchPhrase ] = useState('');
 
   const organization = api.organization.getById.useQuery(query.organization);
-  const { mutate: createBook } = api.book.create.useMutation({ onSuccess: () => refetch() });
-  const { mutate: updateBooks } = api.book.update.useMutation({ onSuccess: () => refetch() });
-  const { mutate: deleteBooks } = api.book.delete.useMutation({ onSuccess: () => refetch() });
-  const { data: books, refetch }= api.book.getByOrganization.useQuery(organization.data?.id ?? '', { enabled: false });
+  const { mutate: createBook } = api.book.create.useMutation({ onSuccess: () => refetchBooks() });
+  const { mutate: updateBooks } = api.book.update.useMutation({ onSuccess: () => refetchBooks() });
+  const { mutate: deleteBooks } = api.book.delete.useMutation({ onSuccess: () => refetchBooks() });
+  const { data: books, refetch: refetchBooks }= api.book.getByOrganization.useQuery(organization.data?.id ?? '', { enabled: false });
 
-  const handleFetch = async () => {
-    refetch();
+  const { mutate: createRooms } = api.room.create.useMutation({ onSuccess: () => refetchRooms() });
+  const { mutate: updateRooms } = api.room.update.useMutation({ onSuccess: () => refetchRooms() });
+  const { mutate: deleteRooms } = api.room.delete.useMutation({ onSuccess: () => refetchRooms() });
+  const { data: rooms, refetch: refetchRooms }= api.room.getByOrganization.useQuery(organization.data?.id ?? '', { enabled: false });
+
+  const handleBookFetch = async () => {
+    refetchBooks();
   }
 
-  const handleAdd = async () => {
+  const handleBookCreate = async () => {
     createBook({
       organizationId: organization.data!.id,
       books: [
@@ -52,17 +58,46 @@ const Inventory = () => {
     });
   }
 
-  const handleUpdate = () => {
+  const handleBookUpdate = () => {
     updateBooks({
       organizationId: organization.data!.id,
       books: books!.map((book) => ({ ...book, name: 'Księga' })),
     });
   }
 
-  const handleDelete = () => {
+  const handleBookDelete = () => {
     deleteBooks({
       organizationId: organization.data!.id,
       books: books!.map((book) => book.id),
+    });
+  }
+
+  const handleRoomRefetch = () => {
+    refetchRooms();
+  }
+
+  const handleRoomCreate = () => {
+    createRooms({
+      organizationId: organization.data!.id,
+      rooms: [
+        {
+          name: 'Test',
+        },
+      ],
+    });
+  }
+
+  const handleRoomUpdate = () => {
+    updateRooms({
+      organizationId: organization.data!.id,
+      rooms: rooms!.map((room) => ({ ...room, name: 'Update' })),
+    });
+  }
+
+  const handleRoomDelete = () => {
+    deleteRooms({
+      organizationId: organization.data!.id,
+      rooms: rooms!.map((room) => room.id),
     });
   }
 
@@ -158,29 +193,60 @@ const Inventory = () => {
           flex={1}
           h="100%"
           p={3}
+          gap={3}
         >
+          Ilość ksiąg: {books?.length ?? '0'}
+
           <Button
-            onClick={handleAdd}
+            onClick={handleBookFetch}
           >
-            Dodaj
+            Fetch books
           </Button>
 
           <Button
-            onClick={handleFetch}
+            onClick={handleBookCreate}
           >
-            Ilość ksiąg: {books?.length ?? '0'}
+            Create book
           </Button>
 
           <Button
-            onClick={handleUpdate}
+            onClick={handleBookUpdate}
           >
-            Update
+            Update book
           </Button>
 
           <Button
-            onClick={handleDelete}
+            onClick={handleBookDelete}
           >
-            Delete
+            Delete book
+          </Button>
+
+          <Divider/>
+
+          Ilość pomieszczeń: {rooms?.length ?? '0'}
+
+          <Button
+            onClick={handleRoomRefetch}
+          >
+            Fetch rooms
+          </Button>
+
+          <Button
+            onClick={handleRoomCreate}
+          >
+            Create room
+          </Button>
+
+          <Button
+            onClick={handleRoomUpdate}
+          >
+            Update room
+          </Button>
+
+          <Button
+            onClick={handleRoomDelete}
+          >
+            Delete rooms
           </Button>
 
           {/* <InventoryTable/> */}
