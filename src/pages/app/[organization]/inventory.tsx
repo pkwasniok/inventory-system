@@ -68,7 +68,7 @@ const Inventory = () => {
   const handleBookDelete = () => {
     deleteBooks({
       organizationId: organization.data!.id,
-      books: books!.map((book) => book.id),
+      books: books ?? [],
     });
   }
 
@@ -97,7 +97,7 @@ const Inventory = () => {
   const handleRoomDelete = () => {
     deleteRooms({
       organizationId: organization.data!.id,
-      rooms: rooms!.map((room) => room.id),
+      rooms: rooms ?? [],
     });
   }
 

@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-import { BookCreateSchema, BookUpdateSchema } from '@/schemas/book';
+import { BookCreateSchema, BookUpdateSchema, BookDeleteSchema } from '@/schemas/book';
 
 import { TRPCError } from '@trpc/server';
 
@@ -74,7 +74,7 @@ export const bookRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({
       organizationId: z.string().uuid(),
-      books: z.array(z.string().uuid()),
+      books: z.array(BookDeleteSchema),
     }))
     .mutation(async ({ ctx, input }) => {
       const books = await ctx.prisma.book.findMany({
@@ -91,13 +91,13 @@ export const bookRouter = createTRPCRouter({
 
       // check if input books belong to organization
       const booksId = books.map((book) => book.id);
-      if (input.books.some((bookId) => !booksId.includes(bookId))) {
+      if (input.books.some((book) => !booksId.includes(book.id))) {
         throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
 
-      await ctx.prisma.$transaction(input.books.map((bookId) => ctx.prisma.book.delete({
+      await ctx.prisma.$transaction(input.books.map((book) => ctx.prisma.book.delete({
         where: {
-          id: bookId,
+          id: book.id,
         },
       })));
     }),

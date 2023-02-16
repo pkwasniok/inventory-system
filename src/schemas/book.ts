@@ -14,20 +14,33 @@ import { z } from 'zod';
 
 
 
-const BookSchema = z.object({
-  name: z.string().min(3),
-  description: z.string().default(''),
-  color: z.string().default("000000"),
+const BookIdSchema = z.string().uuid();
+const BookNameSchema = z.string().min(3);
+const BookDescriptionSchema = z.string().default('');
+const BookColorSchema = z.string().default('000000');
+
+
+
+export const BookCreateSchema = z.object({
+  name: BookNameSchema,
+  description: BookDescriptionSchema,
+  color: BookColorSchema,
 });
-
-
-
-export const BookCreateSchema = BookSchema;
 export type BookCreateInput = z.infer<typeof BookCreateSchema>;
 
 
 
 export const BookUpdateSchema = z.object({
-  id: z.string().uuid(),
-}).merge(BookSchema);
+  id: BookIdSchema,
+  name: BookNameSchema.optional(),
+  description: BookDescriptionSchema.optional(),
+  color: BookColorSchema.optional(),
+});
 export type BookUpdateInput = z.infer<typeof BookUpdateSchema>;
+
+
+
+export const BookDeleteSchema = z.object({
+  id: BookIdSchema,
+});
+export type BookDeleteInput = z.infer<typeof BookDeleteSchema>;

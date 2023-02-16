@@ -6,7 +6,7 @@ import { accessibleBy } from '@casl/prisma';
 
 import { z } from 'zod';
 
-import { RoomCreateSchema, RoomUpdateSchema } from '@/schemas/room';
+import { RoomCreateSchema, RoomUpdateSchema, RoomDeleteSchema } from '@/schemas/room';
 
 
 
@@ -74,7 +74,7 @@ export const roomRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({
       organizationId: z.string().uuid(),
-      rooms: z.array(z.string().uuid()),
+      rooms: z.array(RoomDeleteSchema),
     }))
     .mutation(async ({ ctx, input }) => {
       const rooms = await ctx.prisma.room.findMany({
@@ -88,13 +88,13 @@ export const roomRouter = createTRPCRouter({
 
       // check if rooms belong to organization
       const roomsId = rooms.map((room) => room.id);
-      if (input.rooms.some((roomId) => !roomsId.includes(roomId))) {
+      if (input.rooms.some((room) => !roomsId.includes(room.id))) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
-      await ctx.prisma.$transaction(input.rooms.map((roomId) => ctx.prisma.room.delete({
+      await ctx.prisma.$transaction(input.rooms.map((room) => ctx.prisma.room.delete({
         where: {
-          id: roomId,
+          id: room.id,
         },
       })));
     }),

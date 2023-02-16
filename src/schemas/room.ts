@@ -14,19 +14,33 @@ import { z } from 'zod';
 
 
 
-const RoomSchema = z.object({
-  name: z.string().min(3),
-  description: z.string().default(''),
-  color: z.string().default("000000"),
+const RoomIdSchema = z.string().uuid();
+const RoomNameSchema = z.string().min(3);
+const RoomDescriptionSchema = z.string().default('');
+const RoomColorSchema = z.string().default('000000');
+
+
+
+export const RoomCreateSchema = z.object({
+  name: RoomNameSchema,
+  description: RoomDescriptionSchema,
+  color: RoomColorSchema,
 });
-
-
-
-export const RoomCreateSchema = RoomSchema;
 export type RoomCreateInput = z.infer<typeof RoomCreateSchema>;
 
 
+
 export const RoomUpdateSchema = z.object({
-  id: z.string().uuid(),
-}).merge(RoomSchema);
+  id: RoomIdSchema,
+  name: RoomNameSchema.optional(),
+  description: RoomDescriptionSchema.optional(),
+  color: RoomColorSchema.optional(),
+});
 export type RoomUpdateSchema = z.infer<typeof RoomUpdateSchema>;
+
+
+
+export const RoomDeleteSchema = z.object({
+  id: RoomIdSchema,
+});
+export type RoomDeleteInput = z.infer<typeof RoomDeleteSchema>;
