@@ -33,6 +33,8 @@ const Inventory = () => {
 
   const organization = api.organization.getById.useQuery(query.organization);
   const { mutate: createBook } = api.book.create.useMutation({ onSuccess: () => refetch() });
+  const { mutate: updateBooks } = api.book.update.useMutation({ onSuccess: () => refetch() });
+  const { mutate: deleteBooks } = api.book.delete.useMutation({ onSuccess: () => refetch() });
   const { data: books, refetch }= api.book.getByOrganization.useQuery(organization.data?.id ?? '', { enabled: false });
 
   const handleFetch = async () => {
@@ -47,6 +49,20 @@ const Inventory = () => {
           name: 'Test'
         }
       ],
+    });
+  }
+
+  const handleUpdate = () => {
+    updateBooks({
+      organizationId: organization.data!.id,
+      books: books!.map((book) => ({ ...book, name: 'Księga' })),
+    });
+  }
+
+  const handleDelete = () => {
+    deleteBooks({
+      organizationId: organization.data!.id,
+      books: books!.map((book) => book.id),
     });
   }
 
@@ -153,6 +169,18 @@ const Inventory = () => {
             onClick={handleFetch}
           >
             Ilość ksiąg: {books?.length ?? '0'}
+          </Button>
+
+          <Button
+            onClick={handleUpdate}
+          >
+            Update
+          </Button>
+
+          <Button
+            onClick={handleDelete}
+          >
+            Delete
           </Button>
 
           {/* <InventoryTable/> */}

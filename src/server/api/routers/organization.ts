@@ -5,10 +5,11 @@ import { OrganizationCreateSchema, OrganizationUpdateSchema } from '@/schemas/or
 import { TRPCError } from '@trpc/server';
 
 import { z } from 'zod';
+import { accessibleBy } from '@casl/prisma';
 
 
 
-const ORGANIZATIONS_LIMIT = 10;
+const ORGANIZATIONS_LIMIT = 2;
 
 
 
@@ -18,17 +19,11 @@ export const organizationRouter = createTRPCRouter({
     .input(OrganizationCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const organizationsCount = await ctx.prisma.organization.count({
-        where: {
-          users: {
-            some: {
-              userId: ctx.user.id,
-            },
-          },
-        },
+        where: accessibleBy(ctx.userAbility).Organization,
       });
 
       if (organizationsCount >= ORGANIZATIONS_LIMIT) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
       return await ctx.prisma.organization.create({
@@ -48,17 +43,15 @@ export const organizationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const organization = await ctx.prisma.organization.findFirst({
         where: {
-          users: {
-            some: {
-              userId: ctx.user.id,
-            },
-          },
-          id: input.id,
+          AND: [
+            accessibleBy(ctx.userAbility).Organization,
+            { id: input.id },
+          ],
         },
       });
 
       if (organization == null) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
 
       return await ctx.prisma.organization.update({
@@ -68,26 +61,37 @@ export const organizationRouter = createTRPCRouter({
         data: {
           ...input,
           id: undefined,
-        }
+        },
       });
     }),
 
   delete: protectedProcedure
     .input(z.string().uuid())
     .mutation(async ({ ctx, input }) => {
+      const organization = await ctx.prisma.organization.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ctx.userAbility).Organization,
+            { id: input },
+          ],
+        },
+      });
 
+      if (organization == null) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      await ctx.prisma.organization.delete({
+        where: {
+          id: organization.id,
+        },
+      });
     }),
 
   getAll: protectedProcedure
     .query(async ({ ctx }) => {
       return await ctx.prisma.organization.findMany({
-        where: {
-          users: {
-            some: {
-              userId: ctx.user.id,
-            },
-          },
-        },
+        where: accessibleBy(ctx.userAbility).Organization,
       });
     }),
 
@@ -96,12 +100,10 @@ export const organizationRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.organization.findFirst({
         where: {
-          users: {
-            some: {
-              userId: ctx.user.id,
-            },
-          },
-          id: input,
+          AND: [
+            accessibleBy(ctx.userAbility).Organization,
+            { id: input },
+          ],
         },
       }) ?? undefined;
     }),

@@ -42,7 +42,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     user: opts.user,
-    defineAbilityFor,
+    userAbility: defineAbilityFor(opts.user),
     prisma,
   };
 };

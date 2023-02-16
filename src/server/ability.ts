@@ -2,49 +2,25 @@ import { AbilityBuilder, type PureAbility } from '@casl/ability';
 
 import { createPrismaAbility, type PrismaQuery, type Subjects } from '@casl/prisma';
 
-import { prisma } from './db';
-
 import {
   type User,
   type Organization,
-  type Book,
-  type Room,
-  type Group,
-  type Item,
 } from '@prisma/client';
 
 
 
 type AppActions = 'manage'|'create'|'read'|'update'|'delete';
-type AppSubjects = Subjects<{ Book: Book, Room: Room, Group: Group, Item: Item }>;
+type AppSubjects = Subjects<{ Organization: Organization }>;
 type AppAbility = PureAbility<[AppActions, AppSubjects], PrismaQuery>;
 
-export const defineAbilityFor = async (user?: User, organization?: Organization) => {
+export const defineAbilityFor = (user?: User) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-  if (user == undefined || organization == undefined) {
+  if (user == undefined) {
     return build();
   }
 
-  const _organization = await prisma.organization.findFirst({
-    where: {
-      id: organization.id,
-      users: {
-        some: {
-          userId: user.id,
-        },
-      },
-    },
-  });
-
-  if (_organization == null) {
-    return build();
-  }
-
-  can('manage', 'Book', { organizationId: _organization.id });
-  can('manage', 'Room');
-  can('manage', 'Group');
-  can('manage', 'Item');
+  can('manage', 'Organization', { users: { some: { userId: user.id } } });
 
   return build();
 }
